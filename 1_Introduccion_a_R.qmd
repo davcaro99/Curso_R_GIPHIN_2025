@@ -3,9 +3,10 @@ title: "Módulo 1: Introducción a R, tipos de datos y estructuras básicas"
 author: "David Caro, GIPHIN"
 date: "06/14/2025"
 format:
+  pdf:
+    toc: true
   html: 
     code-background: true
-  pdf: default
 editor: visual
 ---
 
@@ -169,7 +170,7 @@ Todas las funciones en R ya sean de base o de algún paquete tiene una documenta
 
 -   `help(función)`
 
--    `??función` cuando no se conoce bien el nombre de la función
+-   `??función` cuando no se conoce bien el nombre de la función
 
 ```{r}
 
@@ -255,7 +256,3 @@ ggplot(volcanes, aes(x = Elevation..Meters.)) +
   geom_histogram(bins = 30, fill = "darkred", color = "white") +
   labs(title = "Elevación de volcanes del Holoceno", x = "Elevación (m)", y = "Frecuencia")
 ```
-
-# Conclusión
-
-R es un entorno flexible para explorar datos y automatizar tareas comunes en paleontología y geología. En los siguientes módulos profundizaremos en su aplicación con datos estratigráficos, climáticos y filogenéticos.
