@@ -1,10 +1,10 @@
 ---
 title: "Módulo 1: Introducción a R, tipos de datos y estructuras básicas"
 author: "David Caro, GIPHIN"
-date: "14/07/2025"
+date: "06/14/2025"
 format:
-  html: default
-    code-fold: true
+  html: 
+    code-background: true
   pdf: default
 editor: visual
 ---
@@ -17,12 +17,40 @@ Este capítulo introduce R como lenguaje de programación enfocado en el anális
 
 **R** es un lenguaje de código abierto utilizado ampliamente en estadística, ciencia de datos y análisis científico. En paleontología y geología, permite analizar y visualizar datos de manera reproducible.
 
+# R es (básicamente) una calculadora
+
+De mayor a menor precedencia:
+
+1.  Paréntesis: `(`, `)`
+
+2.  Exponente: `^` o `**`
+
+3.  División: `/`
+
+4.  Multiplicación: `*`
+
+5.  Suma: `+`
+
+6.  Resta `-`
+
+R permite hacer todo tipo de operaciones y comparaciones a los objetos que usemos
+
+```{r}
+log10(10)
+567 / 4
+sin(1)
+1 == 1
+1 != 2 
+1 >= -9
+5 < 3
+```
+
 # Variables y tipos de datos
 
 ``` r
 # Asignación de variables
 edad <- 120
-formacion <- "Talampaya"
+formacion <- "Rosa Blanca"
 es_marine <- TRUE
 
 # Tipos de datos
@@ -31,59 +59,174 @@ class(formacion)   # character
 class(es_marine)   # logical
 ```
 
-# Vectores y factores
+# Vectores y factores matrices
 
-``` r
+```{r}
 # Crear vectores
-litologias <- c("caliza", "lutita", "arenisca", "caliza")
+litologias <- c("micrita", "lutita", "arenita", "micrita")
 unique(litologias)
 
 # Convertir a factor
 litologias <- factor(litologias)
 levels(litologias)
+
+# Operar sobre vectores
+x <- 1:5
+x
+2^x
+
 ```
 
-# Funciones
+# Listas y matrices
 
 ``` r
-# Función simple
-doblar <- function(x) {
-  return(x * 2)
-}
+#Las listas son como vectores pero permiten varios tipos de datos
+lista <- list(1, "a", TRUE, 1+4i)
+lista
 
-doblar(5)
+lista_2 <- list(title = "Numbers", numbers = 1:10, data = TRUE )
+lista_2
+```
+
+```{r}
+#Las matrices son listas bidimensionales
+matrix_example <- matrix(1:18, ncol=6, nrow=3)
+matrix_example
+dim(matrix_example)
+#nrow
+#ncol
+```
+
+# Dataframes
+
+Los dataframes son los objetos más usados en R
+
+```{r}
+#Un data frame se es como una matriz pero tiene caracteristicas especiales
+ratones <- data.frame(color = c("gris", "negro", "blanco"),
+                      peso = c(0.4, 0.2, 0.6),
+                      tiene_cria = c(1, 0, 1))                    
+head(ratones)                  
+
+#Cada columna de un df tiene puede tener una clase diferente
+#las columnas se pueden indexar por su nombre
+class(ratones$color)
 ```
 
 # Estructuras de control
 
-``` r
+```{r}
 x <- 100
 
 # Condicional
-if (x > 50) {
-  print("Mayor que 50")
+if (x >= 50) {
+  print("x es ayor o igual que 50")
+} else if (x < 50) {
+  print("x es mayor a 50, pero menor a 100")
 } else {
-  print("Menor o igual a 50")
+  print("x es menor a 50")
 }
 
 # Bucle for
 for (i in 1:3) {
   print(i)
 }
+
+# Se pueden correr bucles dentro de bucles
+for(i in 1:5){
+  for(j in c('a', 'b', 'c')){
+    print(paste(i,j))
+  }
+}
 ```
 
-# R packages
+Escriban un codigo que con un vector x 1:10 evalue cada número e imprima si es par o impar
+
+```{r}
+#| code-fold: true
+
+x <- 1:10
+for(i in x){
+  if (i%%2 == 0){
+    print(paste(i,"es par"))
+  } else {
+    print(paste(i,"es impar"))
+  }
+}
+```
+
+# Funciones
+
+::: callout-warning
+## Documentación o ayuda
+
+Todas las funciones en R ya sean de base o de algún paquete tiene una documentación que nos explica su funcionamiento, sus argumentos y su salida.
+:::
+
+## Para ver la documentación de una función:
+
+-   `?función`
+
+-   `help(función)`
+
+-    `??función` cuando no se conoce bien el nombre de la función
+
+```{r}
+
+# Función simple
+doblar <- function(x) {
+  return(x * 2)
+}
+
+doblar(5)
+
+#Para crear un error, podemos usar la función stop() y que el codigo pare
+#si las condiciones no se están cumpliendo
+#R provee la función stopifnot() para no tener que crear un condicional if
+```
+
+Escriba una función que convierta de grados kelvin a celsius y pare si los datos ingresados no son numericos
+
+```{r}
+#| code-fold: true
+#| 
+kelvin_a_celsius <- function(temp) {
+  stopifnot(is.numeric(temp))
+  kelvin <- temp - 273.15
+  rm(temp)
+  return(kelvin)
+}
+
+kelvin_a_celsius(300)
+```
+
+# Paquetes de R
 
 Un **paquete** es una colección de funciones, datos y documentación que amplía las capacidades básicas de R. Existen miles de paquetes creados por la comunidad científica para tareas específicas como visualización, análisis geoespacial, manipulación de datos, entre otros.
 
+-   Algunos de los paquetes que vamos a usar:
+
+    -   `Tidyverse` conjunto de paquetes para manipular y visualizar datos de forma organizada.
+
+        -   `ggplot2` para gráficos y visualizaciones.
+        -   `dplyr` para manipulación de datos.
+
+    -   `SDAR` permite crear columnas estratigraficas facilmente.
+
+    -   `paleoverse` conjunto de paquetes orientados a paleontología.
+
+        -   `macrostrat` permite visualizar y cargar para datos estratigráficos.
+        -   `sepkosky` permite visualizar y acceder a datos de géneros de fosiles marinos.
+
 # Importación de datos
 
-En R hay varias formas de importar datos, se pueden leer los archivos
+En R hay varias formas de importar datos, se pueden leer los archivos usando las funciones base de R, que permiten cargar diversos formatos, se pueden usar las funciones del paquete \`readr\`\` o se pueden importar por medio de un paquete que contiene un dataset.
 
 ## Conjunto de datos: Palmer Penguins
 
-``` r
-install.packages("palmerpenguins")
+```{r}
+#| warning: false
+#install.packages("palmerpenguins")
 library(palmerpenguins)
 
 # Visualizar
@@ -93,9 +236,9 @@ summary(penguins)
 
 ## Conjunto de datos: Erupciones volcánicas en el Holoceno
 
-Supongamos que el archivo se llama `volcanes.csv` y está en la carpeta `datos/`.
+setw
 
-``` r
+```{r}
 volcanes <- read.csv("datos/volcanes.csv")
 head(volcanes)
 str(volcanes)
@@ -104,7 +247,7 @@ summary(volcanes$Elevation..Meters.)
 
 # Visualización básica con ggplot2
 
-``` r
+```{r}
 library(ggplot2)
 
 # Histograma de elevación de volcanes
