@@ -1,0 +1,118 @@
+---
+title: "Módulo 1: Introducción a R, tipos de datos y estructuras básicas"
+author: "David Caro, GIPHIN"
+date: "14/07/2025"
+format:
+  html: default
+    code-fold: true
+  pdf: default
+editor: visual
+---
+
+# Introducción
+
+Este capítulo introduce R como lenguaje de programación enfocado en el análisis de datos. Aprenderemos los tipos de objetos más comunes, cómo crear funciones simples, estructuras de control básicas y cómo importar y explorar conjuntos de datos reales.
+
+# ¿Qué es R?
+
+**R** es un lenguaje de código abierto utilizado ampliamente en estadística, ciencia de datos y análisis científico. En paleontología y geología, permite analizar y visualizar datos de manera reproducible.
+
+# Variables y tipos de datos
+
+``` r
+# Asignación de variables
+edad <- 120
+formacion <- "Talampaya"
+es_marine <- TRUE
+
+# Tipos de datos
+class(edad)        # numeric
+class(formacion)   # character
+class(es_marine)   # logical
+```
+
+# Vectores y factores
+
+``` r
+# Crear vectores
+litologias <- c("caliza", "lutita", "arenisca", "caliza")
+unique(litologias)
+
+# Convertir a factor
+litologias <- factor(litologias)
+levels(litologias)
+```
+
+# Funciones
+
+``` r
+# Función simple
+doblar <- function(x) {
+  return(x * 2)
+}
+
+doblar(5)
+```
+
+# Estructuras de control
+
+``` r
+x <- 100
+
+# Condicional
+if (x > 50) {
+  print("Mayor que 50")
+} else {
+  print("Menor o igual a 50")
+}
+
+# Bucle for
+for (i in 1:3) {
+  print(i)
+}
+```
+
+# R packages
+
+Un **paquete** es una colección de funciones, datos y documentación que amplía las capacidades básicas de R. Existen miles de paquetes creados por la comunidad científica para tareas específicas como visualización, análisis geoespacial, manipulación de datos, entre otros.
+
+# Importación de datos
+
+En R hay varias formas de importar datos, se pueden leer los archivos
+
+## Conjunto de datos: Palmer Penguins
+
+``` r
+install.packages("palmerpenguins")
+library(palmerpenguins)
+
+# Visualizar
+head(penguins)
+summary(penguins)
+```
+
+## Conjunto de datos: Erupciones volcánicas en el Holoceno
+
+Supongamos que el archivo se llama `volcanes.csv` y está en la carpeta `datos/`.
+
+``` r
+volcanes <- read.csv("datos/volcanes.csv")
+head(volcanes)
+str(volcanes)
+summary(volcanes$Elevation..Meters.)
+```
+
+# Visualización básica con ggplot2
+
+``` r
+library(ggplot2)
+
+# Histograma de elevación de volcanes
+ggplot(volcanes, aes(x = Elevation..Meters.)) +
+  geom_histogram(bins = 30, fill = "darkred", color = "white") +
+  labs(title = "Elevación de volcanes del Holoceno", x = "Elevación (m)", y = "Frecuencia")
+```
+
+# Conclusión
+
+R es un entorno flexible para explorar datos y automatizar tareas comunes en paleontología y geología. En los siguientes módulos profundizaremos en su aplicación con datos estratigráficos, climáticos y filogenéticos.
