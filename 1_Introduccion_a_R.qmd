@@ -3,8 +3,6 @@ title: "Módulo 1: Introducción a R, tipos de datos y estructuras básicas"
 author: "David Caro, GIPHIN"
 date: "06/14/2025"
 format:
-  pdf:
-    toc: true
   html: 
     code-background: true
 editor: visual
@@ -46,6 +44,37 @@ sin(1)
 5 < 3
 ```
 
+## Operadores aritméticos en R
+
+| Precedencia            | Operador   | Descripción     | Ejemplo             |
+|------------------------|------------|-----------------|---------------------|
+| 0 (siempre va primero) | `( )`      | Paréntesis      | 2 \* `(3 + 4)` → 14 |
+| 1 (alta)               | `^` o `**` | Potencia        | `2 ^ 3` → 8         |
+| 2                      | `-`        | Negación        | `-5` → -5           |
+| 3                      | `*`        | Multiplicación  | `4 * 2` → 8         |
+| 3                      | `/`        | División real   | `8 / 2` → 4         |
+| 3                      | `%%`       | Módulo (resto)  | `10 %% 3` → 1       |
+| 3                      | `%/%`      | División entera | `10 %/% 3` → 3      |
+| 4 (baja)               | `+`        | Suma            | `3 + 5` → 8         |
+| 4                      | `-`        | Resta           | `7 - 2` → 5         |
+
+## Operadores lógicos en R
+
+| Operador | Nombre | Descripción | Ejemplo |
+|------------------|------------------|------------------|------------------|
+| `<` | Menor que | Compara si un valor es menor | `5 < 10` → `TRUE` |
+| `<=` | Menor o igual |  | `5 <= 5` → `TRUE` |
+| `>` | Mayor que |  | `10 > 3` → `TRUE` |
+| `>=` | Mayor o igual |  | `4 >= 4` → `TRUE` |
+| `==` | Igual a | Comparación de igualdad | `3 == 3` → `TRUE` |
+| `!=` | Distinto de |  | `5 != 4` → `TRUE` |
+| `&` | Y lógico (elemento a elemento) | Ambos deben ser verdaderos | `TRUE & FALSE` → `FALSE` |
+| `|` | O lógico (elemento a elemento) | Uno de los dos debe ser verdadero | `c(TRUE, FALSE, FALSE)| c(TRUE, TRUE, FALSE)` → `TRUE  TRUE  FALSE` |
+| `&&` | Y lógico (primer elemento) | Solo compara el primer valor | `c(TRUE, FALSE) && c(TRUE, TRUE)` → `TRUE` |
+| `||` | O lógico (primer elemento) | Solo compara el primer valor | `c(TRUE, FALSE, TRUE) || c(FALSE, TRUE, FALSE)`→ `TRUE` |
+| `%in%` | Se encuentra en | Evalua si el valor está presente en la matriz | `"a" %in% c ("b", "b", "a", "x","b","x")` → `TRUE` |
+| `!` | Negación lógica | Invierte el valor lógico | `!TRUE` → `FALSE` |
+
 # Variables y tipos de datos
 
 ``` r
@@ -60,7 +89,7 @@ class(formacion)   # character
 class(es_marine)   # logical
 ```
 
-# Vectores y factores matrices
+## Vectores y factores matrices
 
 ```{r}
 # Crear vectores
@@ -78,7 +107,7 @@ x
 
 ```
 
-# Listas y matrices
+## Listas y matrices
 
 ``` r
 #Las listas son como vectores pero permiten varios tipos de datos
@@ -98,7 +127,7 @@ dim(matrix_example)
 #ncol
 ```
 
-# Dataframes
+## Dataframes
 
 Los dataframes son los objetos más usados en R
 
@@ -141,7 +170,11 @@ for(i in 1:5){
 }
 ```
 
-Escriban un codigo que con un vector x 1:10 evalue cada número e imprima si es par o impar
+::: callout-important
+## Ejercicio
+
+Escribe un codigo que con un vector x 1:10 evalue cada número e imprima si es par o impar
+:::
 
 ```{r}
 #| code-fold: true
@@ -186,7 +219,11 @@ doblar(5)
 #R provee la función stopifnot() para no tener que crear un condicional if
 ```
 
-Escriba una función que convierta de grados kelvin a celsius y pare si los datos ingresados no son numericos
+::: callout-important
+## Ejercicio
+
+Escribe una función que convierta de grados kelvin a celsius y pare si los datos ingresados no son numericos
+:::
 
 ```{r}
 #| code-fold: true
@@ -221,18 +258,46 @@ Un **paquete** es una colección de funciones, datos y documentación que amplí
 
 # Importación de datos
 
-En R hay varias formas de importar datos, se pueden leer los archivos usando las funciones base de R, que permiten cargar diversos formatos, se pueden usar las funciones del paquete \`readr\`\` o se pueden importar por medio de un paquete que contiene un dataset.
+En R hay varias formas de importar datos, se pueden leer los archivos usando las funciones base de R, que permiten cargar diversos formatos, se pueden usar las funciones del paquete `readr` o se pueden importar por medio de un paquete que contiene un dataset.
+
+# Explorando los datos
 
 ## Conjunto de datos: Palmer Penguins
 
 ```{r}
 #| warning: false
 #install.packages("palmerpenguins")
+library(tidyverse)
 library(palmerpenguins)
 
 # Visualizar
 head(penguins)
+str(penguins)
 summary(penguins)
+#glimpse(penguins)
+#Para tener una mejor idea de los datos seleccionamos 10 al azar
+penguins[sample(nrow(penguins), 10), ]
+unique(penguins$island)
+
+```
+
+### Entender e interactuar con los datos
+
+```{r}
+# Extraer solo ciertas filas y columnas para crear subsets
+penguins[,-c(3:5)]
+```
+
+::: callout-important
+## Ejercicio
+
+Crea un data frame llamado `penguins_2009` que sea el subset de penguins, que solo tenga los datos del año 2009, que no tenga las medidas de tamaño y sin los valores NA. Usa la función `na.omit( )`
+:::
+
+```{r}
+#| code-fold: true
+penguins_2009 <- na.omit(penguins[penguins$year == 2009, -c(3:5)])
+penguins_2009
 ```
 
 ## Conjunto de datos: Erupciones volcánicas en el Holoceno

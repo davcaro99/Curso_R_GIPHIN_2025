@@ -73,11 +73,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body>
+<body class="fullcontent">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="1_Introduccion_a_R.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -161,6 +160,174 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] FALSE</code></pre>
 </div>
 </div>
+<section id="operadores-aritméticos-en-r" class="level2">
+<h2 class="anchored" data-anchor-id="operadores-aritméticos-en-r">Operadores aritméticos en R</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 16%">
+<col style="width: 22%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Precedencia</th>
+<th>Operador</th>
+<th>Descripción</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 (siempre va primero)</td>
+<td><code>( )</code></td>
+<td>Paréntesis</td>
+<td>2 * <code>(3 + 4)</code> → 14</td>
+</tr>
+<tr class="even">
+<td>1 (alta)</td>
+<td><code>^</code> o <code>**</code></td>
+<td>Potencia</td>
+<td><code>2 ^ 3</code> → 8</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>-</code></td>
+<td>Negación</td>
+<td><code>-5</code> → -5</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>*</code></td>
+<td>Multiplicación</td>
+<td><code>4 * 2</code> → 8</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><code>/</code></td>
+<td>División real</td>
+<td><code>8 / 2</code> → 4</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>%%</code></td>
+<td>Módulo (resto)</td>
+<td><code>10 %% 3</code> → 1</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><code>%/%</code></td>
+<td>División entera</td>
+<td><code>10 %/% 3</code> → 3</td>
+</tr>
+<tr class="even">
+<td>4 (baja)</td>
+<td><code>+</code></td>
+<td>Suma</td>
+<td><code>3 + 5</code> → 8</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><code>-</code></td>
+<td>Resta</td>
+<td><code>7 - 2</code> → 5</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="operadores-lógicos-en-r" class="level2">
+<h2 class="anchored" data-anchor-id="operadores-lógicos-en-r">Operadores lógicos en R</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operador</th>
+<th>Nombre</th>
+<th>Descripción</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&lt;</code></td>
+<td>Menor que</td>
+<td>Compara si un valor es menor</td>
+<td><code>5 &lt; 10</code> → <code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;=</code></td>
+<td>Menor o igual</td>
+<td></td>
+<td><code>5 &lt;= 5</code> → <code>TRUE</code></td>
+</tr>
+<tr class="odd">
+<td><code>&gt;</code></td>
+<td>Mayor que</td>
+<td></td>
+<td><code>10 &gt; 3</code> → <code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td><code>&gt;=</code></td>
+<td>Mayor o igual</td>
+<td></td>
+<td><code>4 &gt;= 4</code> → <code>TRUE</code></td>
+</tr>
+<tr class="odd">
+<td><code>==</code></td>
+<td>Igual a</td>
+<td>Comparación de igualdad</td>
+<td><code>3 == 3</code> → <code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td><code>!=</code></td>
+<td>Distinto de</td>
+<td></td>
+<td><code>5 != 4</code> → <code>TRUE</code></td>
+</tr>
+<tr class="odd">
+<td><code>&amp;</code></td>
+<td>Y lógico (elemento a elemento)</td>
+<td>Ambos deben ser verdaderos</td>
+<td><code>TRUE &amp; FALSE</code> → <code>FALSE</code></td>
+</tr>
+<tr class="even">
+<td><code>|</code></td>
+<td>O lógico (elemento a elemento)</td>
+<td>Uno de los dos debe ser verdadero</td>
+<td><code>c(TRUE, FALSE, FALSE)| c(TRUE, TRUE, FALSE)</code> → <code>TRUE  TRUE  FALSE</code></td>
+</tr>
+<tr class="odd">
+<td><code>&amp;&amp;</code></td>
+<td>Y lógico (primer elemento)</td>
+<td>Solo compara el primer valor</td>
+<td><code>c(TRUE, FALSE) &amp;&amp; c(TRUE, TRUE)</code> → <code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td><code>||</code></td>
+<td>O lógico (primer elemento)</td>
+<td>Solo compara el primer valor</td>
+<td><code>c(TRUE, FALSE, TRUE) || c(FALSE, TRUE, FALSE)</code>→ <code>TRUE</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in%</code></td>
+<td>Se encuentra en</td>
+<td>Evalua si el valor está presente en la matriz</td>
+<td><code>"a" %in% c ("b", "b", "a", "x","b","x")</code> → <code>TRUE</code></td>
+</tr>
+<tr class="even">
+<td><code>!</code></td>
+<td>Negación lógica</td>
+<td>Invierte el valor lógico</td>
+<td><code>!TRUE</code> → <code>FALSE</code></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="variables-y-tipos-de-datos" class="level1">
 <h1>Variables y tipos de datos</h1>
@@ -173,9 +340,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(edad)        <span class="co"># numeric</span></span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(formacion)   <span class="co"># character</span></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(es_marine)   <span class="co"># logical</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="vectores-y-factores-matrices" class="level1">
-<h1>Vectores y factores matrices</h1>
+<section id="vectores-y-factores-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="vectores-y-factores-matrices">Vectores y factores matrices</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear vectores</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>litologias <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"micrita"</span>, <span class="st">"lutita"</span>, <span class="st">"arenita"</span>, <span class="st">"micrita"</span>)</span>
@@ -201,8 +367,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="listas-y-matrices" class="level1">
-<h1>Listas y matrices</h1>
+<section id="listas-y-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="listas-y-matrices">Listas y matrices</h2>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Las listas son como vectores pero permiten varios tipos de datos</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>lista <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span>, <span class="st">"a"</span>, <span class="cn">TRUE</span>, <span class="dv">1</span><span class="sc">+</span><span class="dv">4</span>i)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>lista</span>
@@ -227,8 +393,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#ncol</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="dataframes" class="level1">
-<h1>Dataframes</h1>
+<section id="dataframes" class="level2">
+<h2 class="anchored" data-anchor-id="dataframes">Dataframes</h2>
 <p>Los dataframes son los objetos más usados en R</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Un data frame se es como una matriz pero tiene caracteristicas especiales</span></span>
@@ -249,6 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] "character"</code></pre>
 </div>
 </div>
+</section>
 </section>
 <section id="estructuras-de-control" class="level1">
 <h1>Estructuras de control</h1>
@@ -299,7 +466,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [1] "5 c"</code></pre>
 </div>
 </div>
-<p>Escriban un codigo que con un vector x 1:10 evalue cada número e imprima si es par o impar</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Escribe un codigo que con un vector x 1:10 evalue cada número e imprima si es par o impar</p>
+</div>
+</div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -362,7 +541,19 @@ Documentación o ayuda
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co">#si las condiciones no se están cumpliendo</span></span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co">#R provee la función stopifnot() para no tener que crear un condicional if</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Escriba una función que convierta de grados kelvin a celsius y pare si los datos ingresados no son numericos</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Escribe una función que convierta de grados kelvin a celsius y pare si los datos ingresados no son numericos</p>
+</div>
+</div>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -403,15 +594,19 @@ Documentación o ayuda
 </section>
 <section id="importación-de-datos" class="level1">
 <h1>Importación de datos</h1>
-<p>En R hay varias formas de importar datos, se pueden leer los archivos usando las funciones base de R, que permiten cargar diversos formatos, se pueden usar las funciones del paquete `readr`` o se pueden importar por medio de un paquete que contiene un dataset.</p>
+<p>En R hay varias formas de importar datos, se pueden leer los archivos usando las funciones base de R, que permiten cargar diversos formatos, se pueden usar las funciones del paquete <code>readr</code> o se pueden importar por medio de un paquete que contiene un dataset.</p>
+</section>
+<section id="explorando-los-datos" class="level1">
+<h1>Explorando los datos</h1>
 <section id="conjunto-de-datos-palmer-penguins" class="level2">
 <h2 class="anchored" data-anchor-id="conjunto-de-datos-palmer-penguins">Conjunto de datos: Palmer Penguins</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("palmerpenguins")</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 8
   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -424,7 +619,19 @@ Documentación o ayuda
 6 Adelie  Torgersen           39.3          20.6               190        3650
 # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [344 × 8] (S3: tbl_df/tbl/data.frame)
+ $ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ island           : Factor w/ 3 levels "Biscoe","Dream",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...
+ $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...
+ $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...
+ $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...
+ $ sex              : Factor w/ 2 levels "female","male": 2 1 1 NA 1 2 1 2 NA NA ...
+ $ year             : int [1:344] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      species          island    bill_length_mm  bill_depth_mm  
  Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  
@@ -443,14 +650,97 @@ Documentación o ayuda
  Max.   :231.0     Max.   :6300                Max.   :2009  
  NA's   :2         NA's   :2                                 </code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#glimpse(penguins)</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Para tener una mejor idea de los datos seleccionamos 10 al azar</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>penguins[<span class="fu">sample</span>(<span class="fu">nrow</span>(penguins), <span class="dv">10</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 8
+   species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Gentoo    Biscoe           49            16.1               216        5550
+ 2 Adelie    Biscoe           35.7          16.9               185        3150
+ 3 Adelie    Biscoe           38.8          17.2               180        3800
+ 4 Adelie    Dream            42.2          18.5               180        3550
+ 5 Adelie    Biscoe           40.6          18.6               183        3550
+ 6 Gentoo    Biscoe           42            13.5               210        4150
+ 7 Adelie    Dream            41.3          20.3               194        3550
+ 8 Gentoo    Biscoe           46.4          15.6               221        5000
+ 9 Chinstrap Dream            46.4          18.6               190        3450
+10 Chinstrap Dream            46.1          18.2               178        3250
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(penguins<span class="sc">$</span>island)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Torgersen Biscoe    Dream    
+Levels: Biscoe Dream Torgersen</code></pre>
+</div>
+</div>
+<section id="entender-e-interactuar-con-los-datos" class="level3">
+<h3 class="anchored" data-anchor-id="entender-e-interactuar-con-los-datos">Entender e interactuar con los datos</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer solo ciertas filas y columnas para crear subsets</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>penguins[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 5
+   species island    body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;           &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Torgersen        3750 male    2007
+ 2 Adelie  Torgersen        3800 female  2007
+ 3 Adelie  Torgersen        3250 female  2007
+ 4 Adelie  Torgersen          NA &lt;NA&gt;    2007
+ 5 Adelie  Torgersen        3450 female  2007
+ 6 Adelie  Torgersen        3650 male    2007
+ 7 Adelie  Torgersen        3625 female  2007
+ 8 Adelie  Torgersen        4675 male    2007
+ 9 Adelie  Torgersen        3475 &lt;NA&gt;    2007
+10 Adelie  Torgersen        4250 &lt;NA&gt;    2007
+# ℹ 334 more rows</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Crea un data frame llamado <code>penguins_2009</code> que sea el subset de penguins, que solo tenga los datos del año 2009, que no tenga las medidas de tamaño y sin los valores NA. Usa la función <code>na.omit( )</code></p>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>penguins_2009 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(penguins[penguins<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2009</span>, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>)])</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>penguins_2009</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 117 × 5
+   species island body_mass_g sex     year
+   &lt;fct&gt;   &lt;fct&gt;        &lt;int&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 Adelie  Biscoe        3725 female  2009
+ 2 Adelie  Biscoe        4725 male    2009
+ 3 Adelie  Biscoe        3075 female  2009
+ 4 Adelie  Biscoe        4250 male    2009
+ 5 Adelie  Biscoe        2925 female  2009
+ 6 Adelie  Biscoe        3550 male    2009
+ 7 Adelie  Biscoe        3750 female  2009
+ 8 Adelie  Biscoe        3900 male    2009
+ 9 Adelie  Biscoe        3175 female  2009
+10 Adelie  Biscoe        4775 male    2009
+# ℹ 107 more rows</code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="conjunto-de-datos-erupciones-volcánicas-en-el-holoceno" class="level2">
 <h2 class="anchored" data-anchor-id="conjunto-de-datos-erupciones-volcánicas-en-el-holoceno">Conjunto de datos: Erupciones volcánicas en el Holoceno</h2>
 <p>setw</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>volcanes <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos/volcanes.csv"</span>)</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(volcanes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>volcanes <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos/volcanes.csv"</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(volcanes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Number                      Name Country                         Region
 1 210010 West Eifel Volcanic Field Germany Mediterranean and Western Asia
@@ -481,7 +771,7 @@ Documentación o ayuda
 5 Subduction Zone / Continental Crust (&gt;25 km)
 6 Subduction Zone / Continental Crust (&gt;25 km)</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(volcanes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(volcanes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   1508 obs. of  12 variables:
  $ Number             : int  210010 210020 210030 210040 211001 211003 211004 211010 211020 211030 ...
@@ -497,7 +787,7 @@ Documentación o ayuda
  $ Dominant.Rock.Type : chr  "Foidite" "Basalt / Picro-Basalt" "Trachybasalt / Tephrite Basanite" "Basalt / Picro-Basalt" ...
  $ Tectonic.Setting   : chr  "Rift Zone / Continental Crust (&gt;25 km)" "Rift Zone / Continental Crust (&gt;25 km)" "Intraplate / Continental Crust (&gt;25 km)" "Intraplate / Continental Crust (&gt;25 km)" ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(volcanes<span class="sc">$</span>Elevation..Meters.)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(volcanes<span class="sc">$</span>Elevation..Meters.)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 -4200.0   687.2  1464.0  1683.4  2352.2  6879.0 </code></pre>
@@ -508,24 +798,20 @@ Documentación o ayuda
 <section id="visualización-básica-con-ggplot2" class="level1">
 <h1>Visualización básica con ggplot2</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograma de elevación de volcanes</span></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(volcanes, <span class="fu">aes</span>(<span class="at">x =</span> Elevation..Meters.)) <span class="sc">+</span></span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"darkred"</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Elevación de volcanes del Holoceno"</span>, <span class="at">x =</span> <span class="st">"Elevación (m)"</span>, <span class="at">y =</span> <span class="st">"Frecuencia"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograma de elevación de volcanes</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(volcanes, <span class="fu">aes</span>(<span class="at">x =</span> Elevation..Meters.)) <span class="sc">+</span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"darkred"</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Elevación de volcanes del Holoceno"</span>, <span class="at">x =</span> <span class="st">"Elevación (m)"</span>, <span class="at">y =</span> <span class="st">"Frecuencia"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="1_Introduccion_a_R_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="1_Introduccion_a_R_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="conclusión" class="level1">
-<h1>Conclusión</h1>
-<p>R es un entorno flexible para explorar datos y automatizar tareas comunes en paleontología y geología. En los siguientes módulos profundizaremos en su aplicación con datos estratigráficos, climáticos y filogenéticos.</p>
 </section>
 
 </main>
