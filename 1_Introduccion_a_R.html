@@ -102,10 +102,69 @@ window.Quarto = {
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">Introducción</a></li>
+  <li><a href="#qué-es-r" id="toc-qué-es-r" class="nav-link" data-scroll-target="#qué-es-r">¿Qué es R?</a></li>
+  <li><a href="#r-es-básicamente-una-calculadora" id="toc-r-es-básicamente-una-calculadora" class="nav-link" data-scroll-target="#r-es-básicamente-una-calculadora">R es (básicamente) una calculadora</a>
+  <ul class="collapse">
+  <li><a href="#operadores-aritméticos-en-r" id="toc-operadores-aritméticos-en-r" class="nav-link" data-scroll-target="#operadores-aritméticos-en-r">Operadores aritméticos en R</a></li>
+  <li><a href="#operadores-lógicos-en-r" id="toc-operadores-lógicos-en-r" class="nav-link" data-scroll-target="#operadores-lógicos-en-r">Operadores lógicos en R</a></li>
+  </ul></li>
+  <li><a href="#variables-y-tipos-de-datos" id="toc-variables-y-tipos-de-datos" class="nav-link" data-scroll-target="#variables-y-tipos-de-datos">Variables y tipos de datos</a>
+  <ul class="collapse">
+  <li><a href="#vectores-y-factores-matrices" id="toc-vectores-y-factores-matrices" class="nav-link" data-scroll-target="#vectores-y-factores-matrices">Vectores y factores matrices</a></li>
+  <li><a href="#listas-y-matrices" id="toc-listas-y-matrices" class="nav-link" data-scroll-target="#listas-y-matrices">Listas y matrices</a></li>
+  <li><a href="#dataframes" id="toc-dataframes" class="nav-link" data-scroll-target="#dataframes">Dataframes</a></li>
+  </ul></li>
+  <li><a href="#estructuras-de-control" id="toc-estructuras-de-control" class="nav-link" data-scroll-target="#estructuras-de-control">Estructuras de control</a></li>
+  <li><a href="#funciones" id="toc-funciones" class="nav-link" data-scroll-target="#funciones">Funciones</a>
+  <ul class="collapse">
+  <li><a href="#para-ver-la-documentación-de-una-función" id="toc-para-ver-la-documentación-de-una-función" class="nav-link" data-scroll-target="#para-ver-la-documentación-de-una-función">Para ver la documentación de una función:</a></li>
+  </ul></li>
+  <li><a href="#paquetes-de-r" id="toc-paquetes-de-r" class="nav-link" data-scroll-target="#paquetes-de-r">Paquetes de R</a></li>
+  <li><a href="#importación-de-datos" id="toc-importación-de-datos" class="nav-link" data-scroll-target="#importación-de-datos">Importación de datos</a></li>
+  <li><a href="#conjunto-de-datos-palmer-penguins" id="toc-conjunto-de-datos-palmer-penguins" class="nav-link" data-scroll-target="#conjunto-de-datos-palmer-penguins">Conjunto de datos: Palmer Penguins</a>
+  <ul class="collapse">
+  <li><a href="#entender-e-interactuar-con-los-datos" id="toc-entender-e-interactuar-con-los-datos" class="nav-link" data-scroll-target="#entender-e-interactuar-con-los-datos">Entender e interactuar con los datos</a></li>
+  <li><a href="#graficando-y-correlacionando-datos" id="toc-graficando-y-correlacionando-datos" class="nav-link" data-scroll-target="#graficando-y-correlacionando-datos">Graficando y correlacionando datos</a></li>
+  <li><a href="#pruebas-t-y-anova" id="toc-pruebas-t-y-anova" class="nav-link" data-scroll-target="#pruebas-t-y-anova">Pruebas T y ANOVA</a></li>
+  <li><a href="#correlación-y-ggplot" id="toc-correlación-y-ggplot" class="nav-link" data-scroll-target="#correlación-y-ggplot">Correlación y ggplot</a></li>
+  </ul></li>
+  <li><a href="#estadística-descriptiva" id="toc-estadística-descriptiva" class="nav-link" data-scroll-target="#estadística-descriptiva">Estadística descriptiva</a>
+  <ul class="collapse">
+  <li><a href="#medidas-de-tendencia-central" id="toc-medidas-de-tendencia-central" class="nav-link" data-scroll-target="#medidas-de-tendencia-central">Medidas de Tendencia Central</a>
+  <ul class="collapse">
+  <li><a href="#media-aritmética-barx" id="toc-media-aritmética-barx" class="nav-link" data-scroll-target="#media-aritmética-barx">Media Aritmética ( <span class="math inline">\(\bar{x}\)</span>)</a></li>
+  <li><a href="#mediana-me" id="toc-mediana-me" class="nav-link" data-scroll-target="#mediana-me">Mediana (<span class="math inline">\(Me\)</span>)</a></li>
+  <li><a href="#moda-mo" id="toc-moda-mo" class="nav-link" data-scroll-target="#moda-mo">Moda (Mo)</a></li>
+  </ul></li>
+  <li><a href="#medidas-de-dispersión" id="toc-medidas-de-dispersión" class="nav-link" data-scroll-target="#medidas-de-dispersión">Medidas de Dispersión</a>
+  <ul class="collapse">
+  <li><a href="#rango-r" id="toc-rango-r" class="nav-link" data-scroll-target="#rango-r">Rango ( R )</a></li>
+  <li><a href="#desviación-estándar-s-o-σ" id="toc-desviación-estándar-s-o-σ" class="nav-link" data-scroll-target="#desviación-estándar-s-o-σ">Desviación Estándar (<span class="math inline">\(s\)</span> o <span class="math inline">\(σ\)</span>)</a></li>
+  </ul></li>
+  <li><a href="#medidas-de-relación" id="toc-medidas-de-relación" class="nav-link" data-scroll-target="#medidas-de-relación">Medidas de Relación</a>
+  <ul class="collapse">
+  <li><a href="#correlación-r" id="toc-correlación-r" class="nav-link" data-scroll-target="#correlación-r">Correlación (r)</a></li>
+  </ul></li>
+  <li><a href="#estadística-descriptiva-multivariada" id="toc-estadística-descriptiva-multivariada" class="nav-link" data-scroll-target="#estadística-descriptiva-multivariada">Estadística Descriptiva Multivariada</a>
+  <ul class="collapse">
+  <li><a href="#análisis-de-componentes-principales-pca" id="toc-análisis-de-componentes-principales-pca" class="nav-link" data-scroll-target="#análisis-de-componentes-principales-pca">Análisis de Componentes Principales (PCA)</a></li>
+  <li><a href="#análisis-de-correspondencias-simples-ca" id="toc-análisis-de-correspondencias-simples-ca" class="nav-link" data-scroll-target="#análisis-de-correspondencias-simples-ca">Análisis de Correspondencias Simples (CA)</a></li>
+  <li><a href="#análisis-de-correspondencias-múltiples-mca" id="toc-análisis-de-correspondencias-múltiples-mca" class="nav-link" data-scroll-target="#análisis-de-correspondencias-múltiples-mca">Análisis de Correspondencias Múltiples (MCA)</a></li>
+  <li><a href="#métodos-de-clasificación-clustering" id="toc-métodos-de-clasificación-clustering" class="nav-link" data-scroll-target="#métodos-de-clasificación-clustering">Métodos de Clasificación (Clustering)</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -145,6 +204,7 @@ window.Quarto = {
 </section>
 <section id="qué-es-r" class="level1">
 <h1>¿Qué es R?</h1>
+<p><img src="images/clipboard-1643532529.png" class="img-fluid"></p>
 <p><strong>R</strong> es un lenguaje de código abierto utilizado ampliamente en estadística, ciencia de datos y análisis científico. En paleontología y geología, permite analizar y visualizar datos de manera reproducible.</p>
 </section>
 <section id="r-es-básicamente-una-calculadora" class="level1">
@@ -625,10 +685,8 @@ Ejercicio
 <h1>Importación de datos</h1>
 <p>En R hay varias formas de importar datos, se pueden leer los archivos usando las funciones base de R, que permiten cargar diversos formatos, se pueden usar las funciones del paquete <code>readr</code> o se pueden importar por medio de un paquete que contiene un dataset.</p>
 </section>
-<section id="explorando-los-datos" class="level1">
-<h1>Explorando los datos</h1>
-<section id="conjunto-de-datos-palmer-penguins" class="level2">
-<h2 class="anchored" data-anchor-id="conjunto-de-datos-palmer-penguins">Conjunto de datos: Palmer Penguins</h2>
+<section id="conjunto-de-datos-palmer-penguins" class="level1">
+<h1>Conjunto de datos: Palmer Penguins</h1>
 <p><img src="images/clipboard-3699167880.png" class="img-fluid"></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("palmerpenguins")</span></span>
@@ -687,16 +745,16 @@ Ejercicio
 <pre><code># A tibble: 10 × 8
    species   island   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
    &lt;fct&gt;     &lt;fct&gt;             &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
- 1 Gentoo    Biscoe             48.4          16.3               220        5400
- 2 Adelie    Dream              39.6          18.8               190        4600
- 3 Adelie    Biscoe             38.2          20                 190        3900
- 4 Adelie    Biscoe             37.9          18.6               193        2925
- 5 Gentoo    Biscoe             48.5          14.1               220        5300
- 6 Gentoo    Biscoe             50            15.9               224        5350
- 7 Gentoo    Biscoe             49.1          14.8               220        5150
- 8 Chinstrap Dream              46.4          17.8               191        3700
- 9 Gentoo    Biscoe             44.9          13.3               213        5100
-10 Adelie    Torgers…           34.4          18.4               184        3325
+ 1 Adelie    Biscoe             37.7          18.7               180        3600
+ 2 Chinstrap Dream              43.5          18.1               202        3400
+ 3 Adelie    Torgers…           39.2          19.6               195        4675
+ 4 Adelie    Torgers…           39.1          18.7               181        3750
+ 5 Chinstrap Dream              48.1          16.4               199        3325
+ 6 Adelie    Torgers…           37.8          17.1               186        3300
+ 7 Gentoo    Biscoe             45.2          13.8               215        4750
+ 8 Gentoo    Biscoe             50.1          15                 225        5000
+ 9 Adelie    Biscoe             36.4          17.1               184        2850
+10 Adelie    Dream              42.3          21.2               191        4150
 # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(penguins<span class="sc">$</span>island)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -705,8 +763,8 @@ Ejercicio
 Levels: Biscoe Dream Torgersen</code></pre>
 </div>
 </div>
-<section id="entender-e-interactuar-con-los-datos" class="level3">
-<h3 class="anchored" data-anchor-id="entender-e-interactuar-con-los-datos">Entender e interactuar con los datos</h3>
+<section id="entender-e-interactuar-con-los-datos" class="level2">
+<h2 class="anchored" data-anchor-id="entender-e-interactuar-con-los-datos">Entender e interactuar con los datos</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer solo ciertas filas y columnas para crear subsets</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>penguins[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -890,8 +948,8 @@ X1 66.64</code></pre>
 </div>
 </div>
 </section>
-<section id="graficando-y-correlacionando-datos" class="level3">
-<h3 class="anchored" data-anchor-id="graficando-y-correlacionando-datos">Graficando y correlacionando datos</h3>
+<section id="graficando-y-correlacionando-datos" class="level2">
+<h2 class="anchored" data-anchor-id="graficando-y-correlacionando-datos">Graficando y correlacionando datos</h2>
 <p>Para graficar usaremos la libreria <code>ggplot</code>, si bien la función base <code>plot</code> nos permite crear graficas <code>ggplot</code> añade muchas opciones y mejor calidad, también se puede usar la libreria <code>ggpubr</code> que facilita el uso de <code>ggplot</code> para algunas graficas (usaremos unos ejemplos de <code>ggpubr</code> en donde mejor se desempeña), pero nos vamos a centrar en <code>ggplot</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co">#ggplot viene incluida en Tidyverse y permite crear graficos de gran calidad</span></span>
@@ -1015,8 +1073,8 @@ Guardad gráficas en <code>ggpubr</code>
 </div>
 </div>
 </section>
-<section id="pruebas-t-y-anova" class="level3">
-<h3 class="anchored" data-anchor-id="pruebas-t-y-anova">Pruebas T y ANOVA</h3>
+<section id="pruebas-t-y-anova" class="level2">
+<h2 class="anchored" data-anchor-id="pruebas-t-y-anova">Pruebas T y ANOVA</h2>
 <p>El análisis de varianza (ANOVA) es una&nbsp;prueba estadística utilizada para comparar las medias de tres o más grupos.&nbsp;Analiza la varianza dentro y entre grupos para determinar si las diferencias entre las medias son significativas. <strong>La prueba T</strong> se usa entre dos grupos.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1066,8 +1124,8 @@ Valor p
 </div>
 </div>
 </section>
-<section id="correlación-pca-y-ggplot" class="level3">
-<h3 class="anchored" data-anchor-id="correlación-pca-y-ggplot">Correlación, PCA y ggplot</h3>
+<section id="correlación-y-ggplot" class="level2">
+<h2 class="anchored" data-anchor-id="correlación-y-ggplot">Correlación y ggplot</h2>
 <p>Primero veremos como podemos explorar los datos usando gráficas con <code>ggplot</code></p>
 <p>En <code>ggplot</code> podemos agregar cada caracteristica que deseemos a la gráfica usando <code>+</code> todo los detalles y opciones se pueden encontrar en: <a href="https://ggplot2.tidyverse.org/reference/index.html">referencia del paquete ggplot2</a>.</p>
 <div class="cell">
@@ -1159,85 +1217,7 @@ Multiple R-squared:  0.7892,    Adjusted R-squared:  0.7874
 F-statistic: 421.9 on 3 and 338 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-<p>Por último haremos un <a href="#análisis-de-componentes-principales-pca">Análisis de Componentes Principales (PCA)</a> con los datos de los pingüinos</p>
 </section>
-</section>
-<section id="conjunto-de-datos-erupciones-volcánicas-en-el-holoceno" class="level2">
-<h2 class="anchored" data-anchor-id="conjunto-de-datos-erupciones-volcánicas-en-el-holoceno">Conjunto de datos: Erupciones volcánicas en el Holoceno</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>volcanes <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos/volcanes.csv"</span>)</span>
-<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(volcanes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Number                      Name Country                         Region
-1 210010 West Eifel Volcanic Field Germany Mediterranean and Western Asia
-2 210020           Chaine des Puys  France Mediterranean and Western Asia
-3 210030       Olot Volcanic Field   Spain Mediterranean and Western Asia
-4 210040  Calatrava Volcanic Field   Spain Mediterranean and Western Asia
-5 211001                Larderello   Italy Mediterranean and Western Asia
-6 211003                   Vulsini   Italy Mediterranean and Western Asia
-                 Type Activity.Evidence Last.Known.Eruption Latitude Longitude
-1             Maar(s)    Eruption Dated            8300 BCE   50.170      6.85
-2        Lava dome(s)    Eruption Dated            4040 BCE   45.775      2.97
-3 Pyroclastic cone(s) Evidence Credible             Unknown   42.170      2.53
-4 Pyroclastic cone(s)    Eruption Dated            3600 BCE   38.870     -4.02
-5 Explosion crater(s) Eruption Observed             1282 CE   43.250     10.87
-6             Caldera Eruption Observed             104 BCE   42.600     11.93
-  Elevation..Meters.               Dominant.Rock.Type
-1                600                          Foidite
-2               1464            Basalt / Picro-Basalt
-3                893 Trachybasalt / Tephrite Basanite
-4               1117            Basalt / Picro-Basalt
-5                500                          No Data
-6                800          Trachyte / Trachydacite
-                              Tectonic.Setting
-1       Rift Zone / Continental Crust (&gt;25 km)
-2       Rift Zone / Continental Crust (&gt;25 km)
-3      Intraplate / Continental Crust (&gt;25 km)
-4      Intraplate / Continental Crust (&gt;25 km)
-5 Subduction Zone / Continental Crust (&gt;25 km)
-6 Subduction Zone / Continental Crust (&gt;25 km)</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(volcanes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   1508 obs. of  12 variables:
- $ Number             : int  210010 210020 210030 210040 211001 211003 211004 211010 211020 211030 ...
- $ Name               : chr  "West Eifel Volcanic Field" "Chaine des Puys" "Olot Volcanic Field" "Calatrava Volcanic Field" ...
- $ Country            : chr  "Germany" "France" "Spain" "Spain" ...
- $ Region             : chr  "Mediterranean and Western Asia" "Mediterranean and Western Asia" "Mediterranean and Western Asia" "Mediterranean and Western Asia" ...
- $ Type               : chr  "Maar(s)" "Lava dome(s)" "Pyroclastic cone(s)" "Pyroclastic cone(s)" ...
- $ Activity.Evidence  : chr  "Eruption Dated" "Eruption Dated" "Evidence Credible" "Eruption Dated" ...
- $ Last.Known.Eruption: chr  "8300 BCE" "4040 BCE" "Unknown" "3600 BCE" ...
- $ Latitude           : num  50.2 45.8 42.2 38.9 43.2 ...
- $ Longitude          : num  6.85 2.97 2.53 -4.02 10.87 ...
- $ Elevation..Meters. : int  600 1464 893 1117 500 800 949 458 1281 789 ...
- $ Dominant.Rock.Type : chr  "Foidite" "Basalt / Picro-Basalt" "Trachybasalt / Tephrite Basanite" "Basalt / Picro-Basalt" ...
- $ Tectonic.Setting   : chr  "Rift Zone / Continental Crust (&gt;25 km)" "Rift Zone / Continental Crust (&gt;25 km)" "Intraplate / Continental Crust (&gt;25 km)" "Intraplate / Continental Crust (&gt;25 km)" ...</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(volcanes<span class="sc">$</span>Elevation..Meters.)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
--4200.0   687.2  1464.0  1683.4  2352.2  6879.0 </code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="visualización-básica-con-ggplot2" class="level1">
-<h1>Visualización básica con ggplot2</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Histograma de elevación de volcanes</span></span>
-<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(volcanes, <span class="fu">aes</span>(<span class="at">x =</span> Elevation..Meters.)) <span class="sc">+</span></span>
-<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">"darkred"</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Elevación de volcanes del Holoceno"</span>, <span class="at">x =</span> <span class="st">"Elevación (m)"</span>, <span class="at">y =</span> <span class="st">"Frecuencia"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="1_Introduccion_a_R_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
 </section>
 <section id="estadística-descriptiva" class="level1">
 <h1>Estadística descriptiva</h1>

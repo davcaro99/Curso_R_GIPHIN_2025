@@ -3,8 +3,6 @@ title: "Módulo 1: Introducción a R, tipos de datos y estructuras básicas"
 author: "David Caro, GIPHIN"
 date: "06/14/2025"
 format:
-  pdf: 
-    toc: true
   html:
     toc: true
     code-background: true
