@@ -3,7 +3,10 @@ title: "Módulo 1: Introducción a R, tipos de datos y estructuras básicas"
 author: "David Caro, GIPHIN"
 date: "06/14/2025"
 format:
-  html: 
+  pdf: 
+    toc: true
+  html:
+    toc: true
     code-background: true
 editor: visual
 ---
@@ -13,6 +16,8 @@ editor: visual
 Este capítulo introduce R como lenguaje de programación enfocado en el análisis de datos. Aprenderemos los tipos de objetos más comunes, cómo crear funciones simples, estructuras de control básicas y cómo importar y explorar conjuntos de datos reales.
 
 # ¿Qué es R?
+
+![](images/clipboard-1643532529.png)
 
 **R** es un lenguaje de código abierto utilizado ampliamente en estadística, ciencia de datos y análisis científico. En paleontología y geología, permite analizar y visualizar datos de manera reproducible.
 
@@ -260,9 +265,9 @@ Un **paquete** es una colección de funciones, datos y documentación que amplí
 
 En R hay varias formas de importar datos, se pueden leer los archivos usando las funciones base de R, que permiten cargar diversos formatos, se pueden usar las funciones del paquete `readr` o se pueden importar por medio de un paquete que contiene un dataset.
 
-# Explorando los datos
+# Conjunto de datos: Palmer Penguins
 
-## Conjunto de datos: Palmer Penguins
+![](images/clipboard-3699167880.png)
 
 ```{r}
 #| warning: false
@@ -281,11 +286,14 @@ unique(penguins$island)
 
 ```
 
-### Entender e interactuar con los datos
+## Entender e interactuar con los datos
 
 ```{r}
 # Extraer solo ciertas filas y columnas para crear subsets
 penguins[,-c(3:5)]
+# la función select pertenece a tidyverse y permite selccionar solo lo descrito
+# el operador %>% se llama pipe y nos deja pasar un obejto por una o más funciones
+penguins %>% select(bill_length_mm)
 ```
 
 ::: callout-important
@@ -300,24 +308,397 @@ penguins_2009 <- na.omit(penguins[penguins$year == 2009, -c(3:5)])
 penguins_2009
 ```
 
-## Conjunto de datos: Erupciones volcánicas en el Holoceno
-
-setw
+R permite calcular muy facilmente los valores importantes de [Estadística descriptiva] para un dataset, hay algunos paquetes que hacen esto incluso más sencillo.
 
 ```{r}
-volcanes <- read.csv("datos/volcanes.csv")
-head(volcanes)
-str(volcanes)
-summary(volcanes$Elevation..Meters.)
+#| message: false
+#| warning: false
+#| echo: true
+#Esta libreria tiene funciones muy utiles para estadística descriptiva
+#install.packages("psych")
+library(psych)
 ```
 
-# Visualización básica con ggplot2
+```{r}
+#| fig-cap: "Histograma"
+mass_2009 <- penguins_2009$body_mass_g
+#Calculamos el promedio y la desviación estandar de los datos
+mean(mass_2009)
+sd(mass_2009)
+
+summary(mass_2009)
+#La función describe del paquete psych nos da una mejor visión de los datos
+describe(mass_2009)
+#plot(penguins_2009$body_mass_g)
+hist(mass_2009)
+#La función decribeBy nos permite ver los valores por grupo
+#cada grupo es una especie ya que son diferentes poblaciones
+describeBy( x=penguins_2009$body_mass_g, group=penguins_2009$species)
+```
 
 ```{r}
+# Tidyverse nos permite agrupar y ordenar los datos como deseemos
+mass_by_island_species <- penguins_2009 %>% 
+  group_by(island,species) %>% 
+  summarise(mean_mass=mean(body_mass_g),
+            sd_mass=sd(body_mass_g))
+mass_by_island_species
+#tambien existe la función mutate que nos permite crear nuevas variables
+
+mass_2009_kg <- penguins_2009 %>% 
+  mutate(body_mass_kg=body_mass_g/1000)
+mass_2009_kg
+```
+
+## Graficando y correlacionando datos
+
+Para graficar usaremos la libreria `ggplot`, si bien la función base `plot` nos permite crear graficas `ggplot` añade muchas opciones y mejor calidad, también se puede usar la libreria `ggpubr` que facilita el uso de `ggplot` para algunas graficas (usaremos unos ejemplos de `ggpubr` en donde mejor se desempeña), pero nos vamos a centrar en `ggplot`.
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: true
+#ggplot viene incluida en Tidyverse y permite crear graficos de gran calidad
+#install.packages("ggplot2")
 library(ggplot2)
-
-# Histograma de elevación de volcanes
-ggplot(volcanes, aes(x = Elevation..Meters.)) +
-  geom_histogram(bins = 30, fill = "darkred", color = "white") +
-  labs(title = "Elevación de volcanes del Holoceno", x = "Elevación (m)", y = "Frecuencia")
+#ggpubr nos permite crear graficas usando ggplot pero con mayor facilidad
+#install.packages("ggpubr")
+library(ggpubr)
 ```
+
+`ggpubr` facilita mucho el uso y creación de algunas graficas como:
+
+-   Histogramas
+
+-   Diagramas de caja
+
+-   Diagramas de dispersión
+
+```{r}
+#| label: Histograma-ggpubr
+#| fig-cap: "Histograma picos ggpubr"
+#| warning: false
+#Se invoca la función con el dataset
+ggbarplot(penguins,
+          #Se dice que datos van a ocupar cada eje
+          x = "species",
+          y = "bill_length_mm",
+          #Se añade la desviación estandar
+          add = c("mean_sd"),
+          #Que determina el relleno de los datos
+          fill = "species",
+          #Se añaden las etiquetas
+          label = TRUE,
+          #Cantidad de digitos en las etiquetas
+          lab.nb.digits = 2,
+          #Color y ajuste vertical de las etiquetas
+          lab.vjust = -2.2,
+          lab.col = "red",
+          #Titulo, subtitulo y valores de las etiquetas de los ejes 
+          title = "Longitud media del pico de los pingüinos",
+          subtitle = "La barra de error muestran la desviación estandar",
+          xlab = "Especies",
+          ylab = "Largo del pico (mm)",
+          #Paleta de colores y limite de los ejes
+          ylim = c(0,60),
+          palette = "npg")
+```
+
+![](images/clipboard-2493616168.png)
+
+::: callout-important
+## Ejercicio
+
+Crea un diagrama de violín o de densidad usando `ggviolin()` o `ggdensity()`
+:::
+
+```{r}
+#| label: violin-plot
+#| fig-cap: "gráfica de víolin ggpubr"
+#| warning: false
+#| code-fold: true
+ggviolin(penguins ,
+          x = "species",
+          y = "bill_depth_mm",
+          title = "Profundidad promedio del pico de los pingüinos",
+          xlab = "Especies de pingüinos",
+          ylab = "Profundidad del pico (mm)",
+          fill = "species",
+          palette = "npg",
+          add = "boxplot",
+          shape = "species")
+```
+
+```{r}
+#| label: density-plot
+#| fig-cap: "gráfica de densidad ggpubr"
+#| warning: false
+#| code-fold: true
+ggdensity(penguins,
+          x = "body_mass_g",
+          color = "species",
+          rug = TRUE,
+          fill = "species",
+          add = "mean",
+          title = "Masa corporal promedio de los pingüinos",
+          xlab = "Masa corporal (g)",
+          palette = "lancet")
+```
+
+::: callout-tip
+## Guardad gráficas en `ggpubr`
+
+Usando la función `ggexport()` se pueden guardar las gráficas
+
+```         
+ggexport(filename = "my_plot.png", width = 800, height = 600, res = 150)
+```
+:::
+
+## Pruebas T y ANOVA
+
+El análisis de varianza (ANOVA) es una prueba estadística utilizada para comparar las medias de tres o más grupos. Analiza la varianza dentro y entre grupos para determinar si las diferencias entre las medias son significativas. **La prueba T** se usa entre dos grupos.
+
+::: callout-tip
+## Valor p
+
+El famoso **valor p**, también conocido como valor de probabilidad, es un número que indica la probabilidad de obtener los resultados observados o más extremos que los observados, si la hipótesis nula fuera verdadera. En otras palabras, representa la evidencia en contra de la hipótesis nula. 
+
+-   **Valor p bajo (inferior a 0.05):**
+
+    Indica que los resultados son estadísticamente significativos, es decir, es poco probable que se deban al azar si la hipótesis nula fuera cierta. Se suele rechazar la hipótesis nula cuando el valor p es menor que 0.05.
+
+-   **Valor p alto (superior a 0.05):**
+
+    Indica que no hay evidencia suficiente para rechazar la hipótesis nula, es decir, los resultados podrían deberse al azar. 
+
+los asteriscos indican el nivel de significancia estadística. Normalmente, un asterisco `*` indica significancia al nivel de 0.05 (95%), dos asteriscos `**` al nivel de 0.01 (99%), y tres `***` al nivel de 0.001 (99.9%). Esto significa que existe una alta probabilidad de que la relación observada en la muestra sea también verdadera en la población general. 
+:::
+
+```{r}
+#| label: ANOVA-ggpubr
+#| fig-cap: "ANOVA y T-test ggpubr"
+#| message: false
+#| warning: false
+#| code-fold: true
+
+comparar <- list(c("Adelie", "Chinstrap"), c("Adelie", "Gentoo"), c("Chinstrap", "Gentoo"))
+
+ggboxplot(penguins ,
+          x = "species",
+          y = "bill_depth_mm",
+          title = "Profundidad promedio del pico de los pingüinos",
+          xlab = "Especies de pingüinos",
+          ylab = "Profundidad del pico (mm)",
+          color = "species",
+          palette = "npg",
+          add = "jitter",
+          shape = "species") + 
+  stat_compare_means(method = "anova", label.y = 25) + #anova test
+  stat_compare_means(comparisons = comparar, method = "t.test") # post hoc test using t-test
+```
+
+## Correlación y ggplot
+
+Primero veremos como podemos explorar los datos usando gráficas con `ggplot`
+
+En `ggplot` podemos agregar cada caracteristica que deseemos a la gráfica usando `+` todo los detalles y opciones se pueden encontrar en: [referencia del paquete ggplot2](https://ggplot2.tidyverse.org/reference/index.html).
+
+```{r}
+#| label: sex-species-histogram
+#| fig-cap: "Histograma por especie"
+#| message: false
+#| warning: false
+#Invocamos la función ggplot() con los datos a usar
+# aes()determina que valor cumple cada variable en el data set
+ggplot(penguins, aes(x = sex, fill = species)) +
+  geom_bar(alpha = 0.8) +
+  #Elige el tema minimal
+  theme_minimal() +
+  # Con facet se agrupan las tres gráficas
+  facet_wrap(~species, ncol = 1) +
+  # Se voltean los histogramas para ser verticales
+  coord_flip()
+```
+
+La correlación entre los datos se puede ver por cada par de variables, lo más común con varias varibles es graficar como se correlaciona cada par, el coeficiente varia de -1 hasta 1, `*` significa un valor de p menor a 0.05, `**` es un valor de p 0.1
+
+```{r}
+#| label: Correlation-penguins
+#| fig-cap: "Correlación entre las diferentes variables de los pingüinos"
+#| message: false
+#| warning: false
+#| code-fold: true
+#El paquete GGally nos permite hacer automaticamente un diagrama de
+# dispersión y densidad "kernel" por cada par de variables
+library(GGally)
+penguins %>%
+  select(species, body_mass_g, ends_with("_mm")) %>% 
+  GGally::ggpairs(aes(color = species)) +
+  scale_colour_manual(values = c("darkorange","purple","cyan4")) +
+  scale_fill_manual(values = c("darkorange","purple","cyan4"))
+```
+
+Los modelos lineales nos permiten crear un modelo que usando la correlación entre las variables nos permite clasificar o predecir una variable con respecto a la otra u otras
+
+```{r}
+#| label: lm_penguins_bill
+#| fig-cap: "Modelo lineal y correlación en los picos de los pingüinos"
+#| message: false
+#| warning: false
+#| code-fold: true
+ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_colour_manual(values = c("darkorange","purple","cyan4"))
+
+modelo <- lm(bill_length_mm ~ bill_depth_mm + species,
+            data = penguins)
+summary(modelo)
+```
+
+# Estadística descriptiva
+
+La estadística descriptiva es la base para entender cualquier conjunto de datos y así saber qué análisis realizar y como interpretar estos datos. Aquí se explican las medidas más importantes, primero las medidas univariadas.
+
+## Medidas de Tendencia Central
+
+### Media Aritmética ( $\bar{x}$)
+
+La **media aritmética**, o simplemente la media, es el promedio de un conjunto de datos. Es la suma de todos los valores dividida por el número total de observaciones. Es muy sensible a valores extremos (outliers), lo que la hace útil para datos distribuidos simétricamente.
+
+$$
+\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
+$$
+
+Donde:
+
+-   $\bar{x}$ es la media muestral.
+-   $\sum_{i=1}^{n} x_i$ es la suma de todos los valores individuales $x_i$​ en el conjunto de datos.
+-   $n$ es el número total de observaciones.
+
+### Mediana ($Me$)
+
+La **mediana** es el valor central en un conjunto de datos cuando estos están ordenados de menor a mayor. Si hay un número impar de observaciones, la mediana es el valor en la posición central. Si hay un número par, es el promedio de los dos valores centrales. La mediana es menos sensible a los valores extremos que la media, lo que la hace una medida robusta para datos asimétricos.
+
+**Cómo calcularla**:
+
+1.  Se ordenan todos los datos de forma ascendente o descendente.
+
+2.  Si $n$ es impar, la mediana es el valor en la posición $(n+1)/2$.
+
+3.  Si $n$ es par, la mediana es el promedio de los valores en las posiciones $n/2 y (n/2)+1$.
+
+### Moda (Mo)
+
+La **moda** es el valor que aparece con mayor frecuencia en un conjunto de datos. Un conjunto de datos puede tener una moda (unimodal), dos modas (bimodal), o más (multimodal), o incluso ninguna moda si todos los valores son únicos.
+
+## Medidas de Dispersión
+
+### Rango ( R )
+
+El **rango** es la diferencia entre el valor máximo y el valor mínimo en un conjunto de datos. Es una medida simple de la dispersión, pero muy susceptible a los valores extremos.
+
+$$R = X_{máx} - X_{mín}$$
+
+Donde:
+
+-   $X_{máx}$ es el valor máximo en el conjunto de datos.
+
+-   $X_{mín}$ es el valor mínimo en el conjunto de datos.
+
+###Varianza ($s^2$ o $σ^2$)
+
+La **varianza** mide la dispersión promedio de cada punto de datos con respecto a la media. Cuanto mayor sea la varianza, más dispersos estarán los datos.
+
+Para una **muestra** (varianza muestral):
+
+$$s^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}$$
+
+Para una **población** (varianza poblacional):
+
+$$\sigma^2 = \frac{\sum_{i=1}^{N} (x_i - \mu)^2}{N}$$
+
+Donde:
+
+-   $s^2$ es la varianza muestral.
+
+-   $σ^2$ es la varianza poblacional.
+
+-   $x_i$ es cada valor individual.
+
+-   $\bar{x}$ es la media muestral.
+
+-   $\mu$ es la media poblacional.
+
+-   $n$ es el número de observaciones en la muestra.
+
+-   $N$ es el número de observaciones en la población.
+
+### Desviación Estándar ($s$ o $σ$)
+
+La **desviación estándar** es la raíz cuadrada de la varianza. Es una medida de dispersión más interpretable que la varianza, ya que está en las mismas unidades que los datos originales. Nos dice la dispersión típica de los datos alrededor de la media.
+
+Para una **muestra** (desviación estándar muestral): $$s = \sqrt{s^2} = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}}$$
+
+Para una **población** (desviación estándar poblacional): $$\sigma = \sqrt{\sigma^2} = \sqrt{\frac{\sum_{i=1}^{N} (x_i - \mu)^2}{N}}$$
+
+## Medidas de Relación
+
+Estas medidas nos ayudan a entender la relación entre dos o más variables.
+
+### Correlación (r)
+
+La **correlación** mide la fuerza y la dirección de una relación lineal entre dos variables numéricas. El coeficiente de correlación de Pearson (r) varía entre -1 y +1.
+
+-   Un valor cercano a +1 indica una fuerte correlación positiva (a medida que una variable aumenta, la otra también lo hace).
+
+-   Un valor cercano a -1 indica una fuerte correlación negativa (a medida que una variable aumenta, la otra disminuye).
+
+-   Un valor cercano a 0 indica poca o ninguna correlación lineal.
+
+$$r = \frac{n \sum(x_i y_i) - (\sum x_i)(\sum y_i)}{\sqrt{[n \sum x_i^2 - (\sum x_i)^2][n \sum y_i^2 - (\sum y_i)^2]}}$$
+
+Donde:
+
+-   $n$ es el número de pares de datos.
+
+-   $x_i$ e $y_i$ son los valores individuales de las dos variables.
+
+-   $\sum{x_i y_i}$ es la suma de los productos de cada par de valores.
+
+-   $\sum{x_i}$, $\sum{y_i}$, $\sum{x_i^2}$, $\sum{y_i^2}$ son las sumas de los valores y los cuadrados de los valores, respectivamente.
+
+## Estadística Descriptiva Multivariada
+
+En paleontología, raramente trabajamos con una sola variable. Los organismos son complejos, los ecosistemas interactúan, y los datos que recolectamos son inherentemente multivariados. La estadística descriptiva multivariada nos permite explorar relaciones y patrones en conjuntos de datos con múltiples variables simultáneamente.
+
+### Análisis de Componentes Principales (PCA)
+
+El **Análisis de Componentes Principales** (PCA por sus siglas en inglés: *Principal Component Analysis*) es una técnica de reducción de dimensionalidad. Su objetivo es transformar un conjunto de variables posiblemente correlacionadas en un nuevo conjunto de variables no correlacionadas llamadas componentes principales. Los primeros componentes principales capturan la mayor parte de la varianza total en los datos, permitiéndonos visualizar y entender la estructura subyacente en conjuntos de datos complejos con muchas variables.
+
+**Aplicación en Paleontología**: Se usa comúnmente para analizar datos morfométricos (por ejemplo, muchas medidas de un cráneo o partes del poscráneo) para identificar las principales direcciones de variación morfológica y agrupar especímenes con formas similares.
+
+### Análisis de Correspondencias Simples (CA)
+
+El **Análisis de Correspondencias Simples** (CA por sus siglas en inglés: *Correspondence Analysis*) es una técnica exploratoria utilizada para visualizar la relación entre las filas y las columnas de una tabla de contingencia (frecuencias o proporciones). Permite detectar asociaciones entre categorías de variables cualitativas y representarlas gráficamente en un espacio de baja dimensionalidad.
+
+**Aplicación en Paleontología**: Útil para analizar la asociación entre diferentes taxones fósiles y los tipos de sedimento donde se encuentran, o entre la presencia de ciertas especies y las condiciones paleoambientales inferidas.
+
+### Análisis de Correspondencias Múltiples (MCA)
+
+El **Análisis de Correspondencias Múltiples** (MCA por sus siglas en inglés: *Multiple Correspondence Analysis*) es una extensión del CA que permite analizar las relaciones entre más de dos variables cualitativas. Es útil cuando tenemos múltiples variables categóricas y queremos explorar cómo se asocian entre sí y cómo los individuos (o especímenes) se agrupan en función de estas categorías.
+
+**Aplicación en Paleontología**: Podría usarse para analizar la distribución de múltiples características de un fósil (tipo de dentición, forma de las extremidades, tipo de dieta inferida) a través de diferentes grupos taxonómicos o estratos geológicos.
+
+### Métodos de Clasificación (Clustering)
+
+Los **métodos de clasificación** (también conocidos como *clustering* o análisis de agrupamiento) son técnicas utilizadas para agrupar objetos o individuos en clases o grupos, de manera que los objetos dentro de un mismo grupo son más similares entre sí que a los objetos en otros grupos. No requieren información previa sobre la pertenencia a un grupo, lo que los convierte en métodos "no supervisados".
+
+Existen varios algoritmos, como:
+
+-   **Clustering jerárquico**: Crea una jerarquía de clústeres, que se puede visualizar en un dendrograma.
+
+-   **K-means**: Agrupa los datos en un número predefinido de clústeres ($k$).
+
+**Aplicación en Paleontología**: Indispensable para la **taxonomía numérica**, donde se agrupan especímenes fósiles basándose en múltiples características morfológicas para identificar posibles nuevas especies o variedades. También se usa para agrupar localidades fósiles con composiciones faunísticas o florísticas similares, lo que puede indicar paleoambientes o paleocomunidades específicas.
