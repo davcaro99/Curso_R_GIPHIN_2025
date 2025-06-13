@@ -1,18 +1,26 @@
 ---
-title: "2_mapas_SDAR_y_PBDB"
-author: "David Caro"
+title: "Módulo 2: manipulación de datos, mapas, SDAR y paleobiology database"
+author: "David Caro, GIPHIN"
+date: "06/14/2025"
 format: html
 editor: visual
 ---
 
-## Conjunto de datos: Erupciones volcánicas en el Holoceno
+# Erupciones volcánicas en el Holoceno
 
-```{r} volcanes <- read.csv("datos/volcanes.csv") head(volcanes) str(volcanes) summary(volcanes$Elevation..Meters.)}
+```{r}
+volcanes <- read.csv("datos/volcanes.csv") 
+head(volcanes) 
+str(volcanes) 
+summary(volcanes$Elevation..Meters.)
 ```
 
 # Visualización básica con ggplot2
 
-```{r} library(ggplot2)  # Histograma de elevación de volcanes ggplot(volcanes, aes(x = Elevation..Meters.)) +   geom_histogram(bins = 30, fill = "darkred", color = "white") +   labs(title = "Elevación de volcanes del Holoceno", x = "Elevación (m)", y = "Frecuencia")}
+```{r}
+library(ggplot2)  
+# Histograma de elevación de volcanes 
+ggplot(volcanes, aes(x = Elevation..Meters.)) +   geom_histogram(bins = 30, fill = "darkred", color = "white") +   labs(title = "Elevación de volcanes del Holoceno", x = "Elevación (m)", y = "Frecuencia")
 ```
 
 #  {data-link="Estadística descriptiva"}
