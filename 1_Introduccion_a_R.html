@@ -743,18 +743,18 @@ Ejercicio
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>penguins[<span class="fu">sample</span>(<span class="fu">nrow</span>(penguins), <span class="dv">10</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 8
-   species   island   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
-   &lt;fct&gt;     &lt;fct&gt;             &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
- 1 Adelie    Biscoe             37.7          18.7               180        3600
- 2 Chinstrap Dream              43.5          18.1               202        3400
- 3 Adelie    Torgers…           39.2          19.6               195        4675
- 4 Adelie    Torgers…           39.1          18.7               181        3750
- 5 Chinstrap Dream              48.1          16.4               199        3325
- 6 Adelie    Torgers…           37.8          17.1               186        3300
- 7 Gentoo    Biscoe             45.2          13.8               215        4750
- 8 Gentoo    Biscoe             50.1          15                 225        5000
- 9 Adelie    Biscoe             36.4          17.1               184        2850
-10 Adelie    Dream              42.3          21.2               191        4150
+   species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Chinstrap Dream            50.9          17.9               196        3675
+ 2 Gentoo    Biscoe           45.8          14.2               219        4700
+ 3 Adelie    Dream            44.1          19.7               196        4400
+ 4 Adelie    Dream            36.3          19.5               190        3800
+ 5 Chinstrap Dream            48.1          16.4               199        3325
+ 6 Gentoo    Biscoe           46.4          15                 216        4700
+ 7 Adelie    Biscoe           41.3          21.1               195        4400
+ 8 Adelie    Dream            39            18.7               185        3650
+ 9 Chinstrap Dream            52            18.1               201        4050
+10 Adelie    Dream            39.6          18.8               190        4600
 # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(penguins<span class="sc">$</span>island)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1174,10 +1174,25 @@ Valor p
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> bill_length_mm, <span class="at">y =</span> bill_depth_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
-<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"darkorange"</span>,<span class="st">"purple"</span>,<span class="st">"cyan4"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacemos una gráfica que muestra la profundidad del pico y el largo</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Graficamos las lineas del modelo lineal para cada especie</span></span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> bill_depth_mm, <span class="at">y =</span> bill_length_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Gráfica de dispersión</span></span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Podemos hacer una elipse para cada especie y mostrar como encajan los datos</span></span>
+<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#stat_ellipse(type = "norm")+</span></span>
+<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Lineas del modelo lineal</span></span>
+<span id="cb89-9"><a href="#cb89-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb89-10"><a href="#cb89-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Seleccionamos la escala de colores para que cuadre</span></span>
+<span id="cb89-11"><a href="#cb89-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"darkorange"</span>,<span class="st">"purple"</span>,<span class="st">"cyan4"</span>)) <span class="sc">+</span></span>
+<span id="cb89-12"><a href="#cb89-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Le damos un título </span></span>
+<span id="cb89-13"><a href="#cb89-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">substitute</span>(<span class="fu">paste</span>(<span class="st">"Medidas del pico por especie del género "</span>, <span class="fu">italic</span>(<span class="st">"Pygoscelis"</span>))))<span class="sc">+</span></span>
+<span id="cb89-14"><a href="#cb89-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Cambiamos los nombres de los ejes</span></span>
+<span id="cb89-15"><a href="#cb89-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Profundidad del pico (mm)"</span>)<span class="sc">+</span></span>
+<span id="cb89-16"><a href="#cb89-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Largo del pico (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb89-17"><a href="#cb89-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="st">"Especies"</span>)<span class="sc">+</span></span>
+<span id="cb89-18"><a href="#cb89-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ajustamos el título y cambiamos la leyenda cursiva</span></span>
+<span id="cb89-19"><a href="#cb89-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">vjust =</span> <span class="dv">0</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),<span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"italic"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1189,9 +1204,37 @@ Valor p
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>modelo <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> species,</span>
-<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> penguins)</span>
-<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ahora haremos un moedlo lineal para ver como el largo afecta la profundidad</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>modelo1 <span class="ot">&lt;-</span>  <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm, <span class="at">data =</span> penguins)</span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = bill_length_mm ~ bill_depth_mm, data = penguins)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-12.8949  -3.9042  -0.3772   3.6800  15.5798 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    55.0674     2.5160  21.887  &lt; 2e-16 ***
+bill_depth_mm  -0.6498     0.1457  -4.459 1.12e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.314 on 340 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.05525,   Adjusted R-squared:  0.05247 
+F-statistic: 19.88 on 1 and 340 DF,  p-value: 1.12e-05</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Haremos un nuevo modelo usando tmabién las especies</span></span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>modelo2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> species,</span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> penguins)</span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1217,6 +1260,8 @@ Multiple R-squared:  0.7892,    Adjusted R-squared:  0.7874
 F-statistic: 421.9 on 3 and 338 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
+<p><img src="images/clipboard-425879852.png" class="img-fluid"></p>
+<p>(Tomado de <strong>R for Data Science)</strong></p>
 </section>
 </section>
 <section id="estadística-descriptiva" class="level1">

@@ -2,10 +2,10 @@
 title: "Módulo 1: Introducción a R, tipos de datos y estructuras básicas"
 author: "David Caro, GIPHIN"
 date: "06/14/2025"
-format:
+format: 
   html:
-    toc: true
-    code-background: true
+      toc: true
+      code-background: true
 editor: visual
 ---
 
@@ -545,15 +545,40 @@ Los modelos lineales nos permiten crear un modelo que usando la correlación ent
 #| message: false
 #| warning: false
 #| code-fold: true
-ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+# Hacemos una gráfica que muestra la profundidad del pico y el largo
+# Graficamos las lineas del modelo lineal para cada especie
+ggplot(penguins, aes(x = bill_depth_mm, y = bill_length_mm, color = species)) +
+  # Gráfica de dispersión
   geom_point() +
+  # Podemos hacer una elipse para cada especie y mostrar como encajan los datos
+  #stat_ellipse(type = "norm")+
+  # Lineas del modelo lineal
   geom_smooth(method = "lm", se = FALSE) +
-  scale_colour_manual(values = c("darkorange","purple","cyan4"))
+  # Seleccionamos la escala de colores para que cuadre
+  scale_colour_manual(values = c("darkorange","purple","cyan4")) +
+  #Le damos un título 
+  ggtitle(substitute(paste("Medidas del pico por especie del género ", italic("Pygoscelis"))))+
+  # Cambiamos los nombres de los ejes
+  xlab("Profundidad del pico (mm)")+
+  ylab("Largo del pico (mm)") +
+  labs("Especies")+
+  # Ajustamos el título y cambiamos la leyenda cursiva
+  theme(plot.title = element_text(vjust = 0, hjust = 0.5),legend.text = element_text(face = "italic"))
+  
+  
+# Ahora haremos un moedlo lineal para ver como el largo afecta la profundidad
+modelo1 <-  lm(bill_length_mm ~ bill_depth_mm, data = penguins)
+summary(modelo1)
 
-modelo <- lm(bill_length_mm ~ bill_depth_mm + species,
+# Haremos un nuevo modelo usando tmabién las especies
+modelo2 <- lm(bill_length_mm ~ bill_depth_mm + species,
             data = penguins)
-summary(modelo)
+summary(modelo2)
 ```
+
+![](images/clipboard-425879852.png)
+
+(Tomado de **R for Data Science)**
 
 # Estadística descriptiva
 
