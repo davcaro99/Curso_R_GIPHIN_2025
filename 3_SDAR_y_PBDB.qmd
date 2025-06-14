@@ -1,0 +1,198 @@
+---
+title: "Módulo 3: SDAR y PBDB"
+author: "David Caro, GIPHIN"
+date: "06/14/2025"
+format: 
+  html:
+      toc: true
+      code-background: true
+editor: visual
+---
+
+# Columnas estratigráficas con SDAR
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: true
+# Vamos a cargar algunos de los paquetes a usar
+library(tidyverse)
+library(ggplot2) 
+library(psych)
+library(SDAR)
+library(readxl) 
+```
+
+## ¿Qué es SDAR?
+
+`SDAR` (*Stratigraphic Data Analysis in R*) es un paquete de `R` diseñado para facilitar el **análisis y la visualización de columnas estratigráficas (SC)**. Estas columnas se utilizan ampliamente en geología y paleontología para representar:
+
+-   Tamaño de grano
+
+-   Grosor de unidades
+
+-   Componentes litológicos
+
+-   Contenido fósil
+
+-   Estructuras sedimentarias
+
+Tradicionalmente estas columnas se dibujan a mano en programas como Illustrator, Inkscape, CorelDRAW o Grpher. SDAR automatiza este proceso de manera reproducible y con código abierto. SDAR permite exportar las columnas realizadas a un formato vectorizado haciendo que sea muy fácil luego editar las columnas y así cambiar sus estética.
+
+SDAR fue creado por John Ortiz y Carlos Jaramillo, la publicación sobre le paquete SDAR al igual que los archivos adjuntos se puede encontrar [aquí](https://cran.r-project.org/web/packages/SDAR/vignettes/introduction_to_SDAR.html).
+
+## Instalación
+
+`SDAR` así como sus dependencias se pueden instalar directamende desde `CRAN`:
+
+``` r
+install.packages("SDAR")
+install.packages("readxl")
+```
+
+## Flujo de trabajo típico
+
+1.  📥 **Importación de datos** (plantillas Excel, bases de datos o archivos planos).
+
+2.  ✅ **Validación** del formato y estructura.
+
+3.  📊 **Visualización** de la columna como archivo PDF.
+
+4.  🎨 **Personalización**: estructuras sedimentarias, fósiles, bioturbación, etc.
+
+5.  📈 **Análisis de datos**: estadísticas de litologías, conteo de fósiles, etc.
+
+Para mayor facilidad los creadores de SDAR publicaron archivos de excel con el template para usarse en SDAR y que así no se tenga ningún problema al cargar los datos.
+
+## Carga de datos
+
+El paquete `SDAR` ya tiene un dataset y se puede usar facilmente pero vamos a abrir los archivos `.xlsx` para entender como se es el proceso habitual.
+
+Se cargan dos archivos una de capas y otro de intervalos
+
+```{r}
+# Para obtener ayuda sobre el formato de los datos
+# vignette("SDAR_data_model")
+
+# data(saltarin_beds) carga el dataset de ejmplo
+# Tambien se puede cargar con: 
+# system.file("extdata", "SDAR_v0.95_beds_saltarin.xlsx", package = "SDAR")
+# system.file("extdata", "SDAR_v0.95_intervals_saltarin.xlsx", package = "SDAR")
+
+# Leemos el archivo de capas 
+capas <- read_excel("datos/SDAR_v0.95_beds_saltarin.xlsx")
+
+# Vamos a darle un vistazo a los datos
+str(capas)
+nrow(capas)
+names(capas)
+
+# Al usar SDAR los datos de capas tiene que validarse pasandolos a la clase strata
+# datum indica si el sentido de las capas, base en afloramiento
+capas_val <- strata(capas, datum ="top") # top ya que es un core
+
+```
+
+Veamos un resumen de las capas validadas
+
+```{r}
+# El argumento grain.size permite imprimir el resumen de
+# la litología por tamaño de grano
+summary(capas_val, grain.size=TRUE)
+```
+
+## Graficar capas y añadir datos de intervalos
+
+SDAR no grafica como otros paquetes ya que su salida es siempre un archivo pdf vectorizado.
+
+En cuanto a los intervalos `SDAR` tiene varias opciones y se deben cargar y seleccionar manualmente cuales se incluyen en la grafica, estos datos pueden ser:
+
+| **Nombre en SDAR (argumento)** | **Significado** |
+|------------------------|------------------------------------------------|
+| ncore | número de testigo (núcleo de perforación) |
+| samples | muestras |
+| visual_oil_stain | mancha de petróleo visible |
+| bioturbation | bioturbación (actividad biológica en sedimentos) |
+| sed.structures | estructuras sedimentarias |
+| fossils | fósiles |
+| other.sym | otros símbolos |
+| lithostrat | litostratigrafía (unidades según litología) |
+| chronostrat | cronostratigrafía (unidades según edad geológica) |
+
+```{r}
+# La función plot() genera un archivo pdf, al no tener más valores
+# se crea el archivo con los valores por defecto
+
+#plot(capas_val)
+
+# subset.base y subset.top permiten elegir que parte se desea graficar
+# Vamos a cargar todos los datos de los intervalos
+
+# Cargamos el archivo de intervalos 
+intervalos <- "datos/SDAR_v0.95_intervals_saltarin.xlsx"
+
+# Al leer el archivo de intervalos solo se carga la primera hoja
+str(read_excel(intervalos))
+
+# Vamos a cargar todos los valores de intervalos
+
+core_number_dat <- read_excel(intervalos, sheet = "core_number") #número de testigo
+
+samples_dat <- read_excel(intervalos, sheet = "samples") #muestras
+
+sed_structures_dat <- read_excel(intervalos, sheet = "sed_structures") #estructuras sedimentarias
+
+biot_dat <- read_excel(intervalos, sheet = "bioturbation") #bioturbación
+
+fossils_dat <- read_excel(intervalos, sheet = "fossils") #Fósiles
+
+other_symbols_dat <- read_excel(intervalos, sheet = "other_symbols") #otros símbolos
+
+lito_dat <- read_excel(intervalos, sheet = "lithostra") #litostratigrafía
+
+crono_dat <- read_excel(intervalos, sheet = "chronostra") #cronostratigrafía
+
+meta_dat <- read_excel(intervalos, sheet = "metadata") #metadatos
+
+meta_dat
+```
+
+## Componer y exportar la columna final
+
+Para componer el resultado final se usa la función `plot()` la cual lleva una gran cantidad de argumentos entre los cuales se encuentran:
+
+-   `subset.base` permite elegir el límite inferior a graficar.
+
+-   `subset.top` permite elegir el límite superior a graficar.
+
+-   `plot_order` declara el orden para graficar los diferentes datos.
+
+-   `scale` declara la escala de la columna.
+
+-   `symbols.size` declara el tamaño de los símbolos al graficar la columna.
+
+```{r}
+#| eval: false
+v_order <- c( "chronostrat","lithostrat","samples","bed.number","barscale","ncore","lithology","fossils","sed.structures","bioturbation","other.sym") 
+
+plot(capas_val, data.units="meters",
+    file.name = "prueba_SDAR",
+    subset.base=600, subset.top=550, 
+    bioturbation=biot_dat,
+    fossils=fossils_dat, 
+    sed.structures=sed_structures_dat,
+    other.sym=other_symbols_dat, 
+    samples=samples_dat, 
+    ncore=core_number_dat, 
+    lithostrat=lito_dat, 
+    chronostrat=crono_dat, 
+    symbols.size=0.8,
+    plot.order = v_order,
+    scale = 100)
+```
+
+::: callout-important
+## Ejercicio
+
+Crea tu propia columna cmabiando el orden de los datos, la escala, la cantidad de datos y el rango.
+:::

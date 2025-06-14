@@ -3,8 +3,6 @@ title: "Módulo 2: Datos de volcanes, mapas y modelos estadísticos"
 author: "David Caro, GIPHIN"
 date: "06/14/2025"
 format: 
-  pdf: 
-      toc: true 
   html:
       toc: true
       code-background: true
