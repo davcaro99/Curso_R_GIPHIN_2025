@@ -16,11 +16,15 @@ editor: visual
 #| warning: false
 #| echo: true
 # Vamos a cargar algunos de los paquetes a usar
+#install.packages("paleobioDB")
+#install.packages("SDAR")
+#install.packages("readxl")
 library(tidyverse)
 library(ggplot2) 
 library(psych)
 library(SDAR)
 library(readxl) 
+library(paleobioDB)
 ```
 
 ## ¿Qué es SDAR?
@@ -196,3 +200,61 @@ plot(capas_val, data.units="meters",
 
 Crea tu propia columna cmabiando el orden de los datos, la escala, la cantidad de datos y el rango.
 :::
+
+# **Paleobiology Database**
+
+![](images/clipboard-3834988539.png)
+
+La Paleobiology Database es la base de datos más grande del mundo de datos paleontológicos (Imagen tomada de [Paleobiology Database (PBDB)](https://paleobiodb.org) ).
+
+El paquete `paleobioDB` permite acceder de forma sencilla, reproducible y flexible a los datos paleontológicos disponibles en la [Paleobiology Database (PBDB)](https://paleobiodb.org). Está diseñado tanto para realizar consultas directas como para visualizar datos en sus dimensiones **espaciales, temporales y taxonómicas**.
+
+## Uso básico
+
+El paquete está organizado en dos grupos de funciones:
+
+1.   **Funciones base:** conectan directamente con la API de PBDB (por ejemplo `pbdb_occurrences()`).
+
+2.   **Funciones de análisis:** facilitan la exploración de datos en aspectos taxonómicos, geográficos y temporales.
+
+```{r}
+# Descargar todos los registros de Canidae del intervalo Cuaternario
+canidae <- pbdb_occurrences(
+  base_name = "Canidae",       # Grupo taxonómico
+  interval = "Quaternary",     # Intervalo geológico
+  vocab = "pbdb",              # Vocabulario estándar PBDB
+  limit = "all",               # Traer todos los registros
+  show = c("coords", "classext", "ident")  # Incluir coordenadas, clasificación extendida, etc.
+)
+
+# Ver resolución temporal de los registros
+pbdb_temporal_resolution(canidae)
+
+# Visualizar el rango temporal de géneros
+pbdb_temp_range(canidae, rank = "genus", names = FALSE)
+```
+
+```{r}
+# Riqueza de especies a lo largo del tiempo
+pbdb_richness(canidae, rank = "species", temporal_extent = c(0, 10), res = 1)
+
+# Tasa de origen (especiación)
+pbdb_orig_ext(canidae, rank = "species", temporal_extent = c(0, 10), res = 1, orig_ext = 1)
+
+# Tasa de extinción
+pbdb_orig_ext(canidae, rank = "species", temporal_extent = c(0, 10), res = 1, orig_ext = 2)
+
+```
+
+```{r}
+#| eval: false
+# Mapa de ocurrencias fósiles
+pbdb_map(canidae, main = "Fósiles de Canidae", pch = 19, cex = 0.7)
+
+# Mapa del esfuerzo de muestreo
+pbdb_map_occur(canidae, res = 5)
+
+# Mapa de riqueza de especies
+pbdb_map_richness(canidae, rank = "species", res = 5)
+
+```

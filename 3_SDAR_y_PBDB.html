@@ -90,6 +90,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#graficar-capas-y-añadir-datos-de-intervalos" id="toc-graficar-capas-y-añadir-datos-de-intervalos" class="nav-link" data-scroll-target="#graficar-capas-y-añadir-datos-de-intervalos">Graficar capas y añadir datos de intervalos</a></li>
   <li><a href="#componer-y-exportar-la-columna-final" id="toc-componer-y-exportar-la-columna-final" class="nav-link" data-scroll-target="#componer-y-exportar-la-columna-final">Componer y exportar la columna final</a></li>
   </ul></li>
+  <li><a href="#paleobiology-database" id="toc-paleobiology-database" class="nav-link" data-scroll-target="#paleobiology-database"><strong>Paleobiology Database</strong></a>
+  <ul class="collapse">
+  <li><a href="#uso-básico" id="toc-uso-básico" class="nav-link" data-scroll-target="#uso-básico">Uso básico</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -130,11 +134,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Columnas estratigráficas con SDAR</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vamos a cargar algunos de los paquetes a usar</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SDAR)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("paleobioDB")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("SDAR")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("readxl")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SDAR)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl) </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(paleobioDB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="qué-es-sdar" class="level2">
 <h2 class="anchored" data-anchor-id="qué-es-sdar">¿Qué es SDAR?</h2>
@@ -427,6 +435,302 @@ Ejercicio
 <div class="callout-body-container callout-body">
 <p>Crea tu propia columna cmabiando el orden de los datos, la escala, la cantidad de datos y el rango.</p>
 </div>
+</div>
+</section>
+</section>
+<section id="paleobiology-database" class="level1">
+<h1><strong>Paleobiology Database</strong></h1>
+<p><img src="images/clipboard-3834988539.png" class="img-fluid"></p>
+<p>La Paleobiology Database es la base de datos más grande del mundo de datos paleontológicos (Imagen tomada de <a href="https://paleobiodb.org">Paleobiology Database (PBDB)</a> ).</p>
+<p>El paquete <code>paleobioDB</code> permite acceder de forma sencilla, reproducible y flexible a los datos paleontológicos disponibles en la <a href="https://paleobiodb.org">Paleobiology Database (PBDB)</a>. Está diseñado tanto para realizar consultas directas como para visualizar datos en sus dimensiones <strong>espaciales, temporales y taxonómicas</strong>.</p>
+<section id="uso-básico" class="level2">
+<h2 class="anchored" data-anchor-id="uso-básico">Uso básico</h2>
+<p>El paquete está organizado en dos grupos de funciones:</p>
+<ol type="1">
+<li><p><strong>Funciones base:</strong> conectan directamente con la API de PBDB (por ejemplo <code>pbdb_occurrences()</code>).</p></li>
+<li><p><strong>Funciones de análisis:</strong> facilitan la exploración de datos en aspectos taxonómicos, geográficos y temporales.</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar todos los registros de Canidae del intervalo Cuaternario</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>canidae <span class="ot">&lt;-</span> <span class="fu">pbdb_occurrences</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_name =</span> <span class="st">"Canidae"</span>,       <span class="co"># Grupo taxonómico</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval =</span> <span class="st">"Quaternary"</span>,     <span class="co"># Intervalo geológico</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">vocab =</span> <span class="st">"pbdb"</span>,              <span class="co"># Vocabulario estándar PBDB</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">limit =</span> <span class="st">"all"</span>,               <span class="co"># Traer todos los registros</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">show =</span> <span class="fu">c</span>(<span class="st">"coords"</span>, <span class="st">"classext"</span>, <span class="st">"ident"</span>)  <span class="co"># Incluir coordenadas, clasificación extendida, etc.</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Ver resolución temporal de los registros</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">pbdb_temporal_resolution</span>(canidae)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_SDAR_y_PBDB_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$summary
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0117  0.1173  0.6450  0.9413  1.8060  4.6860 
+
+$temporal_resolution
+   [1] 0.7623 1.1900 1.1900 1.1900 4.4900 0.7800 0.7800 0.7800 0.7800 4.4900
+  [11] 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+  [21] 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+  [31] 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+  [41] 1.1900 1.1900 0.1173 0.1173 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+  [51] 1.1900 2.5683 2.5683 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+  [61] 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+  [71] 1.1900 1.1900 1.1900 1.3860 1.3860 1.1900 1.1900 1.1900 1.1900 1.1900
+  [81] 1.1900 1.1900 1.3860 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+  [91] 1.1900 1.1900 1.1900 0.6450 1.1900 1.1900 0.7800 0.7800 1.1900 1.1900
+ [101] 1.1900 1.1900 0.1960 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.3860
+ [111] 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+ [121] 1.1900 0.1960 0.1960 0.1960 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+ [131] 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+ [141] 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+ [151] 1.1900 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173
+ [161] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173
+ [171] 0.1173 0.1173 0.1960 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173
+ [181] 0.1173 0.1173 0.1173 0.6450 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173
+ [191] 0.1173 0.1173 0.1173 0.1173 1.0260 1.8060 0.0117 0.0117 0.0117 0.0117
+ [201] 0.0117 0.0117 0.0117 0.0117 0.0117 0.7800 2.5800 2.5800 2.5800 2.5800
+ [211] 2.5800 2.5800 2.5800 2.5800 2.5683 0.0117 0.0117 2.5683 2.5683 2.5683
+ [221] 2.5683 2.5683 1.0260 2.5800 2.5683 2.5683 2.5683 2.5683 0.7800 1.0260
+ [231] 1.0260 0.0117 0.0117 0.0117 2.5683 0.0117 0.1173 0.1173 0.0117 2.5800
+ [241] 2.5800 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 2.5683
+ [251] 2.5683 0.0117 2.5683 2.5683 2.5683 0.0117 0.0117 0.0117 0.0117 2.5800
+ [261] 2.5800 2.5800 2.5800 2.5683 0.7623 0.7623 0.7623 0.7623 0.7623 0.7623
+ [271] 0.7623 0.7623 0.7623 1.0260 0.7800 1.0260 1.8060 1.8060 1.8060 1.8060
+ [281] 2.5683 2.5683 2.5683 2.5683 2.5683 1.8060 1.8060 2.5683 2.5683 2.5683
+ [291] 2.5683 2.5683 2.5683 2.5683 2.5683 2.5800 2.5800 2.5800 0.0117 0.0117
+ [301] 0.0117 0.1290 2.5800 2.5800 2.5683 2.5683 2.5683 2.5800 2.5683 2.5683
+ [311] 2.5683 2.5683 2.5800 0.0117 2.5683 2.5683 2.5683 2.5683 2.5683 2.5683
+ [321] 2.5683 0.1173 0.0117 0.0117 0.0117 0.7623 2.5683 3.5883 3.5883 3.5883
+ [331] 3.5883 3.5883 3.5883 1.8060 0.7623 0.7623 0.7623 0.7623 1.8060 1.8060
+ [341] 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 0.6450 0.6450
+ [351] 2.5683 2.5683 2.5683 0.6450 2.5683 2.5683 2.5683 0.1173 0.1173 0.1173
+ [361] 0.6450 0.6450 2.5683 0.6450 0.6450 0.6450 0.6450 1.8060 1.8060 3.5383
+ [371] 3.5383 3.5383 3.5383 2.5683 2.5683 2.5683 2.5683 1.8060 1.8060 1.8060
+ [381] 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 2.4510 2.4510 2.5683
+ [391] 0.6450 1.0260 2.5683 2.5683 2.5683 1.8060 1.8060 1.8060 1.8060 1.8060
+ [401] 2.5683 0.6450 0.6450 0.6450 1.8060 0.6450 2.5683 0.6450 0.6450 0.6450
+ [411] 1.6710 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060
+ [421] 0.6450 0.6450 2.4510 2.4510 0.6450 0.6450 2.5683 0.6450 0.6450 0.6450
+ [431] 0.6450 0.6450 0.6450 0.6450 2.5683 2.5800 2.5683 2.5683 2.5683 2.5683
+ [441] 2.5683 2.5683 2.5683 2.5683 2.5683 2.5800 2.5683 1.8060 0.1173 0.1173
+ [451] 0.1173 0.1173 0.1173 2.5683 2.5683 1.8060 1.8060 1.8060 1.8060 1.8060
+ [461] 1.8060 1.8060 1.8060 1.8060 1.8060 2.5683 2.5683 1.8060 0.7623 1.8060
+ [471] 0.4450 0.4450 0.4450 0.6450 0.6450 1.8060 1.8060 1.8060 1.8060 1.8060
+ [481] 1.8060 1.8060 1.8060 0.6450 0.6450 0.6450 0.6450 1.8060 0.6450 0.6450
+ [491] 0.6450 0.6450 0.6450 0.7623 0.7623 0.7623 0.1173 0.1173 0.1173 0.1173
+ [501] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.6450 1.8060 0.6450 0.6450
+ [511] 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 2.5683 2.5683
+ [521] 2.5683 2.5683 0.7623 0.7623 0.6450 0.6450 0.6450 0.6450 0.1173 0.1173
+ [531] 0.6450 0.6450 0.6450 0.7623 0.7623 0.6450 0.6450 2.5683 2.5683 1.8060
+ [541] 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 1.8060 0.4450 0.4450 0.4450
+ [551] 0.4450 0.4450 0.4450 1.8060 1.8060 1.8060 1.8060 0.1173 0.1173 0.1173
+ [561] 1.8060 2.5683 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450
+ [571] 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450
+ [581] 0.6450 0.4450 1.8060 1.0260 1.0260 0.4450 0.4450 0.4450 0.6450 0.6450
+ [591] 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 2.5683 0.6450 0.6450
+ [601] 0.6450 0.6450 0.6450 0.6450 0.6450 0.6450 1.8060 2.4510 1.8060 1.8060
+ [611] 0.7800 0.6450 0.6450 0.6450 0.6450 1.6710 0.7623 0.7623 0.7623 0.1173
+ [621] 0.1173 1.8060 0.0117 0.0117 0.1173 0.1173 2.5683 2.5683 2.5683 0.1173
+ [631] 0.0117 0.6450 0.1173 0.1290 0.1173 2.5683 2.5683 0.1960 0.6450 1.8060
+ [641] 1.8060 0.6450 4.4900 1.8060 1.8060 1.8060 1.8060 1.8060 0.6450 0.6450
+ [651] 0.0117 1.8060 1.8060 0.1290 0.1173 0.1173 0.1173 0.3883 0.3883 1.7383
+ [661] 2.5683 2.5683 2.5683 2.5683 0.3883 0.3883 0.3883 1.8060 1.8060 1.8060
+ [671] 2.5683 0.1173 0.1173 0.1173 0.1173 0.1290 0.1290 0.1173 1.3500 0.0117
+ [681] 0.0117 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.0117 0.1173
+ [691] 0.1173 0.1173 0.0117 0.1173 0.1173 0.1173 0.1173 0.6450 0.1173 0.1173
+ [701] 0.1173 2.5683 0.1173 0.0117 0.1173 0.1173 0.1173 0.1173 0.1173 1.8060
+ [711] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 2.5683 0.7800 0.7800 0.7800
+ [721] 0.7800 0.1173 0.1173 0.1173 0.1173 0.1173 0.0117 0.1173 0.1173 0.1173
+ [731] 0.1173 0.1173 0.1173 0.1960 0.1960 1.1900 2.5800 0.1173 0.0117 0.1173
+ [741] 0.1173 0.1173 0.1960 0.1173 0.1173 0.1173 0.1173 0.0117 0.0117 0.6450
+ [751] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173
+ [761] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173
+ [771] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 2.5683 2.5800 0.1173 0.0117
+ [781] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1290 0.1290 0.1290
+ [791] 0.1290 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1290 0.1290 0.1290
+ [801] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 3.5883 3.5883 2.5683
+ [811] 0.7623 0.7623 1.8060 2.5800 0.0117 0.1173 0.6450 0.1173 0.1173 0.1173
+ [821] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1290 0.1290 0.1173 0.1173 0.0117
+ [831] 2.5683 0.0117 0.0117 0.1173 0.1290 0.1173 0.1290 0.1290 0.1173 0.1173
+ [841] 0.1173 0.1173 0.1290 0.1173 2.5800 2.5800 2.5683 2.5683 0.1173 0.1173
+ [851] 0.1173 0.1173 0.1173 0.1173 0.6450 2.5683 0.1173 0.1173 0.6450 0.0117
+ [861] 0.0117 1.3500 0.1173 2.5683 2.5683 0.1173 0.1173 1.1900 1.1900 0.1173
+ [871] 1.1900 1.1900 0.1173 0.1173 2.5683 2.5800 2.5800 2.5800 2.5683 2.5683
+ [881] 0.3883 0.3883 1.8060 1.8060 0.1173 0.1173 0.1173 0.3883 0.3883 0.3883
+ [891] 2.5683 2.5683 2.5683 0.1290 0.1290 0.1173 0.1173 0.1960 0.1960 0.1960
+ [901] 0.1960 0.1960 0.1290 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173
+ [911] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173
+ [921] 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 0.1173 1.1900 1.1900
+ [931] 0.7800 4.6860 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900
+ [941] 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 1.1900 0.6450 0.1173 0.0117
+ [951] 0.0117 0.0117 0.0117 0.0117 0.0117 0.1173 0.0117 0.0117 0.0117 0.0117
+ [961] 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117
+ [971] 0.0117 0.0117 0.1290 2.5683 2.5683 1.8060 1.8060 1.8060 1.8060 1.8060
+ [981] 0.1173 0.1173 0.7800 1.0260 1.0260 0.0117 0.0117 0.0117 0.1290 0.1290
+ [991] 1.8060 1.8060 1.8060 1.8060 0.6450 0.6450 0.6450 1.8060 2.5683 0.1290
+[1001] 0.0117 0.0117 0.7623 0.7623 0.7623 1.8060 0.0117 0.1173 0.1173 0.0117
+[1011] 0.0117 0.6450 0.0117 0.1173 0.1173 0.0117 0.0117 0.0117 0.0117 0.0117
+[1021] 0.1290 0.1960 1.1900 0.6450 2.8260 0.1173 1.8060 2.5683 1.8060 1.8060
+[1031] 2.5683 0.7740 0.1173 0.1173 0.1173 0.1173 1.8060 0.1173 1.8060 2.5683
+[1041] 2.5683 2.5683 0.0117 1.3500 1.3500 1.3500 1.3500 0.6450 0.6450 1.8060
+[1051] 0.1960 0.1173 0.1173 0.1173 1.8060 1.8060 2.8260 0.1173 0.1173 0.1173
+[1061] 0.1173 0.3883 1.8060 2.5683 1.8060 1.1900 0.1173 2.5683 0.1960 0.1173
+[1071] 0.1960 0.1173 2.5683 0.1173 2.5683 4.4900 0.1173 0.6450 0.1173 0.1173
+[1081] 0.1173 0.1173 0.1173 0.1173 0.0117 0.0117 0.0117 0.0117 0.6450 0.1960
+[1091] 0.1960 0.1960 0.1173 0.1173 0.3883 0.1290 2.5683 2.5683 0.1173 0.1290
+[1101] 0.0117 0.3883 0.1173 0.1173 0.1173 0.3883 0.3883 0.1173 1.3500 1.3500
+[1111] 0.3883 0.1173 2.5683 0.7623 0.1173 0.0117 0.1173 0.1173 0.1173 0.6450
+[1121] 0.6450 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 2.5683 1.8060 1.8060
+[1131] 2.5683 0.0117 0.0117 0.0117 0.0117 0.1960 0.1173 0.1173 0.1173 2.8260
+[1141] 0.1173 0.1173 2.8260 2.8260 0.1173 0.1173 2.8260 2.5683 2.5683 2.5683
+[1151] 0.1173 0.1173 0.3883 2.4510 0.1173 0.1173 0.0117 0.1173 2.5683 2.5683
+[1161] 0.1173 0.1173 0.1173 0.1173 0.1173 0.0117 0.0117 0.0117 0.0117 0.0117
+[1171] 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 1.8060 0.0117
+[1181] 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117
+[1191] 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117
+[1201] 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117
+[1211] 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117
+[1221] 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117
+[1231] 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117
+[1241] 0.0117 0.0117 0.0117 0.0117 0.0117 3.5883 3.5883 3.5883 3.5883 1.8060
+[1251] 0.1173 0.1173 0.1173 0.1173 2.8260 0.0117 0.0117 1.8060 2.5683 2.5683
+[1261] 2.5683 2.5683 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.0117 0.1173
+[1271] 0.3883 0.1173 0.7740 0.1173 0.3883 0.3883 0.0117 0.1173 0.1173 0.1173
+[1281] 0.0117 0.0117 0.0117 0.1173 0.1173 1.3500 0.3883 0.1173 1.8060 0.6450
+[1291] 0.6450 1.8060 1.8060 1.8060 1.8060 2.4510 2.5683 0.1173 1.8060 1.8060
+[1301] 0.1173 0.1173 0.6450 2.5683 0.1173 0.6450 0.6450 0.6450 1.0260 0.6450
+[1311] 0.6450 0.1173 0.0117 1.0260 1.0260 0.6450 0.6450 0.1173 0.1173 1.8060
+[1321] 1.8060 0.1173 0.2100 0.0117 0.0117 0.4450 1.8060 1.8060 1.8060 1.8060
+[1331] 1.8060 2.8260 2.8260 2.8260 2.8260 2.8260 0.1290 2.5683 1.8060 1.3500
+[1341] 1.3500 1.3500 1.3500 1.3500 3.4000 0.3883 0.0117 0.0117 0.0117 2.5800
+[1351] 2.5683 2.5683 0.3883 0.3883 0.3883 0.1173 1.3500 0.1173 0.3883 2.5683
+[1361] 0.1173 0.3883 0.1173 2.5683 0.3883 0.6450 0.6450 1.8060 2.8260 1.1900
+[1371] 2.5683 2.5683 2.5683 0.1173 2.5683 2.5683 2.5683 2.5683 0.0117 0.0117
+[1381] 1.0260 0.6450 0.0117 0.7623 0.6450 0.6450 0.6450 0.1173 0.1173 0.1173
+[1391] 0.1290 2.5683 2.5683 0.7623 0.1173 2.5683 2.5683 2.5683 0.1173</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar el rango temporal de géneros</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pbdb_temp_range</span>(canidae, <span class="at">rank =</span> <span class="st">"genus"</span>, <span class="at">names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_SDAR_y_PBDB_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                max    min
+Canis        4.7000 0.0000
+Eucyon       3.6000 0.7740
+Aenocyon     3.6000 0.0117
+Cynotherium  3.6000 0.0117
+Prototocyon  3.6000 0.0117
+Theriodictis 3.6000 0.0117
+Xenocyon     3.6000 0.0117
+Lupulella    3.6000 0.0000
+Lycaon       3.6000 0.0000
+Nyctereutes  3.6000 0.0000
+Protocyon    3.6000 0.0000
+Vulpes       3.6000 0.0000
+Borophagus   2.5800 1.8000
+Lupus        2.5800 0.7740
+Sinicuon     2.5800 0.7740
+Cuon         2.5800 0.0117
+Lycorus      2.5800 0.0117
+Chrysocyon   2.5800 0.0000
+Dusicyon     2.5800 0.0000
+Lycalopex    2.5800 0.0000
+Otocyon      2.5800 0.0000
+Schaeffia    2.5800 0.0000
+Speothos     2.5800 0.0000
+Urocyon      2.5800 0.0000
+Cerdocyon    0.4000 0.0000
+Cubacyon     0.1290 0.0000
+Hydrocyon    0.0117 0.0000</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Riqueza de especies a lo largo del tiempo</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pbdb_richness</span>(canidae, <span class="at">rank =</span> <span class="st">"species"</span>, <span class="at">temporal_extent =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">res =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_SDAR_y_PBDB_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   temporal_intervals richness
+1                 0-1       96
+2                 1-2       85
+3                 2-3       71
+4                 3-4       19
+5                 4-5        1
+6                 5-6        0
+7                 6-7        0
+8                 7-8        0
+9                 8-9        0
+10               9-10        0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tasa de origen (especiación)</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pbdb_orig_ext</span>(canidae, <span class="at">rank =</span> <span class="st">"species"</span>, <span class="at">temporal_extent =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">res =</span> <span class="dv">1</span>, <span class="at">orig_ext =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_SDAR_y_PBDB_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            new ext
+1-2 to 0-1   16   5
+2-3 to 1-2   14   0
+3-4 to 2-3   52   0
+4-5 to 3-4   18   0
+5-6 to 4-5    1   0
+6-7 to 5-6    0   0
+7-8 to 6-7    0   0
+8-9 to 7-8    0   0
+9-10 to 8-9   0   0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tasa de extinción</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pbdb_orig_ext</span>(canidae, <span class="at">rank =</span> <span class="st">"species"</span>, <span class="at">temporal_extent =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>), <span class="at">res =</span> <span class="dv">1</span>, <span class="at">orig_ext =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3_SDAR_y_PBDB_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            new ext
+1-2 to 0-1   16   5
+2-3 to 1-2   14   0
+3-4 to 2-3   52   0
+4-5 to 3-4   18   0
+5-6 to 4-5    1   0
+6-7 to 5-6    0   0
+7-8 to 6-7    0   0
+8-9 to 7-8    0   0
+9-10 to 8-9   0   0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mapa de ocurrencias fósiles</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pbdb_map</span>(canidae, <span class="at">main =</span> <span class="st">"Fósiles de Canidae"</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">cex =</span> <span class="fl">0.7</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mapa del esfuerzo de muestreo</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pbdb_map_occur</span>(canidae, <span class="at">res =</span> <span class="dv">5</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Mapa de riqueza de especies</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">pbdb_map_richness</span>(canidae, <span class="at">rank =</span> <span class="st">"species"</span>, <span class="at">res =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
