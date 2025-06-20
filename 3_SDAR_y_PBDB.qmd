@@ -3,9 +3,11 @@ title: "Módulo 3: SDAR y PBDB"
 author: "David Caro, GIPHIN"
 date: "06/14/2025"
 format: 
+  pdf:
+    toc: true
   html:
-      toc: true
-      code-background: true
+    toc: true
+    code-background: true
 editor: visual
 ---
 
@@ -112,7 +114,7 @@ SDAR no grafica como otros paquetes ya que su salida es siempre un archivo pdf v
 En cuanto a los intervalos `SDAR` tiene varias opciones y se deben cargar y seleccionar manualmente cuales se incluyen en la grafica, estos datos pueden ser:
 
 | **Nombre en SDAR (argumento)** | **Significado** |
-|------------------------|------------------------------------------------|
+|----|----|
 | ncore | número de testigo (núcleo de perforación) |
 | samples | muestras |
 | visual_oil_stain | mancha de petróleo visible |
@@ -140,23 +142,24 @@ str(read_excel(intervalos))
 
 # Vamos a cargar todos los valores de intervalos
 
-core_number_dat <- read_excel(intervalos, sheet = "core_number") #número de testigo
-
-samples_dat <- read_excel(intervalos, sheet = "samples") #muestras
-
-sed_structures_dat <- read_excel(intervalos, sheet = "sed_structures") #estructuras sedimentarias
-
-biot_dat <- read_excel(intervalos, sheet = "bioturbation") #bioturbación
-
-fossils_dat <- read_excel(intervalos, sheet = "fossils") #Fósiles
-
-other_symbols_dat <- read_excel(intervalos, sheet = "other_symbols") #otros símbolos
-
-lito_dat <- read_excel(intervalos, sheet = "lithostra") #litostratigrafía
-
-crono_dat <- read_excel(intervalos, sheet = "chronostra") #cronostratigrafía
-
-meta_dat <- read_excel(intervalos, sheet = "metadata") #metadatos
+#número de testigo
+core_number_dat <- read_excel(intervalos, sheet = "core_number") 
+#muestras
+samples_dat <- read_excel(intervalos, sheet = "samples") 
+#estructuras sedimentarias
+sed_structures_dat <- read_excel(intervalos, sheet = "sed_structures") 
+#bioturbación
+biot_dat <- read_excel(intervalos, sheet = "bioturbation") 
+#fósiles
+fossils_dat <- read_excel(intervalos, sheet = "fossils") 
+#otros símbolos
+other_symbols_dat <- read_excel(intervalos, sheet = "other_symbols") 
+#litostratigrafía
+lito_dat <- read_excel(intervalos, sheet = "lithostra") 
+#cronostratigrafía
+crono_dat <- read_excel(intervalos, sheet = "chronostra") 
+#metadatos
+meta_dat <- read_excel(intervalos, sheet = "metadata") 
 
 meta_dat
 ```
@@ -177,7 +180,8 @@ Para componer el resultado final se usa la función `plot()` la cual lleva una g
 
 ```{r}
 #| eval: false
-v_order <- c( "chronostrat","lithostrat","samples","bed.number","barscale","ncore","lithology","fossils","sed.structures","bioturbation","other.sym") 
+v_order <- c( "chronostrat","lithostrat","samples","bed.number","barscale","ncore",
+              "lithology","fossils","sed.structures","bioturbation","other.sym") 
 
 plot(capas_val, data.units="meters",
     file.name = "prueba_SDAR",
@@ -203,9 +207,7 @@ Crea tu propia columna cmabiando el orden de los datos, la escala, la cantidad d
 
 # **Paleobiology Database**
 
-![](images/clipboard-3834988539.png)
-
-La Paleobiology Database es la base de datos más grande del mundo de datos paleontológicos (Imagen tomada de [Paleobiology Database (PBDB)](https://paleobiodb.org) ).
+La [Paleobiology Database (PBDB)](https://paleobiodb.org) es la base de datos más grande del mundo de datos paleontológicos.
 
 El paquete `paleobioDB` permite acceder de forma sencilla, reproducible y flexible a los datos paleontológicos disponibles en la [Paleobiology Database (PBDB)](https://paleobiodb.org). Está diseñado tanto para realizar consultas directas como para visualizar datos en sus dimensiones **espaciales, temporales y taxonómicas**.
 
@@ -213,48 +215,193 @@ El paquete `paleobioDB` permite acceder de forma sencilla, reproducible y flexib
 
 El paquete está organizado en dos grupos de funciones:
 
-1.   **Funciones base:** conectan directamente con la API de PBDB (por ejemplo `pbdb_occurrences()`).
+1.  **Funciones base:** conectan directamente con la API de PBDB (por ejemplo `pbdb_occurrences()`).
 
-2.   **Funciones de análisis:** facilitan la exploración de datos en aspectos taxonómicos, geográficos y temporales.
+2.  **Funciones de análisis:** facilitan la exploración de datos en aspectos taxonómicos, geográficos y temporales.
+
+## Descargando información del API
+
+El paquete posee varias funciones para
+
+El paquete `paleobioDB` permite hacer consultas flexibles a la *Paleobiology Database* (PBDB), enfocadas en:
+
+-   Ocurrencias fósiles
+
+-   Información taxonómica
+
+-   Estratigrafía
+
+-   Referencias bibliográficas, entre otros
+
+Estas funciones permiten **descargar datos paleontológicos estructurados directamente a R** para su análisis.
+
+### Funciones principales y su utilidad
+
+| Función | ¿Qué hace? | Ejemplo |
+|------------------------|------------------------|------------------------|
+| `pbdb_taxon()` | Muestra información detallada de un taxón (autor, año, aparición, tamaño) | `pbdb_taxon (name = "chelus" ,vocab = "pbdb", show = c("attr","app", "size"))` |
+| `pbdb_ref_taxa()` | Devuelve referencias asociadas a un taxón | `pbdb_ref_taxa (name = "felidae")` |
+| `pbdb_collections()` | Muestra información de las colecciones que contienen el item buscado | `pbdb_collections(limit=100, base_name="cetacea")` |
+| `pbdb_intervals()` | Devuelve información sobre todos los intervalos de tiempo en el rango seleccionado | `pbdb_intervals(min_ma = 0,max_ma = 2)` |
+| `pbdb_occurrences()` | Descarga registros fósiles en forma de `dataframe` (ubicación, edad, taxón, etc.) | `pbdb_occurrences (limit="all", base_name ="porifera", show = "coords")` |
+
+Hay un total de 19 funciones para consultar y descargar datos, todas las funciones tienen la misma estructura.
+
+las funciones de ayuda en R (`?pbdb_occurrences`) ofrecen ejemplos y los parámetros más comunes.
+
+-   También puedes consultar la documentación completa de la API en:\
+    👉 <http://paleobiodb.org/data1.2/>
+
+### Consulta de ocurrencias de un grupo
+
+Vamos a consultar las ocurrencias de un grupo y todos los taxones hijos de este durante un periodo temporal, algunos taxones que podemos buscar:
+
+-   Rodentia (Orden de los roedores).
+
+-   Cryptodira ( Suborden de tortugas, donde se encuentra la mayoría de las tortugas marinas y terrestres).
+
+-   Felidae (Familia de los felinos).
+
+-   [Rotaliida](https://www.marinespecies.org/aphia.php?p=taxdetails&id=163158) (Orden de foraminíferos)
+
+-   Radiolaria (Phylum de los radiolarios).
+
+-   Bivalvia (Clase de moluscos con dos valvas ).
+
+-   Ammonitida (Orden de moluscos donde están las amonitas).
 
 ```{r}
-# Descargar todos los registros de Canidae del intervalo Cuaternario
-canidae <- pbdb_occurrences(
-  base_name = "Canidae",       # Grupo taxonómico
-  interval = "Quaternary",     # Intervalo geológico
+# Descargar todos los registros de datos_taxa del intervalo Cuaternario
+datos_taxa <- pbdb_occurrences(
+  # base_name devuleve todos los taxones "hijos",
+  # taxon_name solo devulve el taxon específico
+  
+  base_name = "Ammonitida",       # Grupo taxonómico
+  interval = "Campanian",     # Intervalo geológico
   vocab = "pbdb",              # Vocabulario estándar PBDB
   limit = "all",               # Traer todos los registros
-  show = c("coords", "classext", "ident")  # Incluir coordenadas, clasificación extendida, etc.
+  # Incluir coordenadas, clasificación extendida, etc.
+  show = c("coords", "classext", "ident")  
 )
 
+#
+str(datos_taxa)
+
+print(unique(datos_taxa$family))
+```
+
+## Analizar y graficar información
+
+El paquete posee funciones permiten **visualizar y analizar** los datos obtenidos desde la Paleobiology Database, explorando su dimensión **temporal, taxonómica y espacial**. Estas funciones aceptan un objeto `dataframe`, en este caso `datos_taxa`.
+
+| **Función** | **¿Qué hace?** | **Ejemplo** |
+|------------------|----------------------------|---------------------------|
+| `pbdb_map()` | Muestra un mapa con las ocurrencias fósiles. | `pbdb_map(datos_taxa, main = "Ocurrencias", pch = 19, cex = 0.7)` |
+| `pbdb_map_occur()` | Muestra el esfuerzo de muestreo (número de registros por celda geográfica). | `pbdb_map_occur(datos_taxa, res = 5)` |
+| `pbdb_map_richness()` | Muestra la riqueza (diversidad) de especies/géneros por localidad. | `pbdb_map_richness(datos_taxa, rank = "species")` |
+| `pbdb_richness()` | Grafica la riqueza (número de especies, géneros, etc.) a lo largo del tiempo. | `pbdb_richness(datos_taxa, rank = "species", temporal_extent = c(0, 10), res = 1)` |
+| `pbdb_orig_ext()` | Muestra las tasas de origen y extinción en el tiempo. | `pbdb_orig_ext(datos_taxa, rank = "genus", temporal_extent = c(0, 10), res = 1, orig_ext = 1)` |
+| `pbdb_temp_range()` | Grafica el rango temporal (aparición-extinción) de los taxones en el conjunto de datos. | `pbdb_temp_range(datos_taxa, rank = "species", names = FALSE)` |
+| `pbdb_subtaxa()` | Lista y grafica la cantidad de subgrupos taxonómicos (especies, géneros, familias, etc.). | `pbdb_subtaxa(datos_taxa)` |
+| `pbdb_temporal_resolution()` | Mide y grafica la resolución temporal de los registros fósiles (en millones de años). | `pbdb_temporal_resolution(datos_taxa)` |
+
+```{r}
+#| label: bar-plot-taxa-temp-range
+#| fig-cap: "Histogramas de los taxones de Amonitas"
+
 # Ver resolución temporal de los registros
-pbdb_temporal_resolution(canidae)
+pbdb_subtaxa(datos_taxa, col = "cyan3")
 
 # Visualizar el rango temporal de géneros
-pbdb_temp_range(canidae, rank = "genus", names = FALSE)
+#pbdb_temp_range(datos_taxa, rank = "genus", col = "cyan3", names = FALSE)
 ```
 
-```{r}
+Otras de las funciones útiles para explorar los datos son las siguientes:
+
+``` r
 # Riqueza de especies a lo largo del tiempo
-pbdb_richness(canidae, rank = "species", temporal_extent = c(0, 10), res = 1)
+pbdb_richness(datos_taxa, rank = "species", res = 2, 
+              temporal_extent = c(65, 95))
 
 # Tasa de origen (especiación)
-pbdb_orig_ext(canidae, rank = "species", temporal_extent = c(0, 10), res = 1, orig_ext = 1)
+pbdb_orig_ext(datos_taxa, rank = "species", temporal_extent = c(65, 95), 
+              res = 1, orig_ext = 1)
 
 # Tasa de extinción
-pbdb_orig_ext(canidae, rank = "species", temporal_extent = c(0, 10), res = 1, orig_ext = 2)
+pbdb_orig_ext(datos_taxa, rank = "species", temporal_extent = c(65, 95), 
+              res = 1, orig_ext = 2)
+```
+
+Hagamos un mapa con las ocurrencias de fósiles de Amonitas durante el Campaniano usando las funciones del paquete
+
+```{r}
+#| label: mapa-amonitas-campaniano
+#| fig-cap: "Mapa de Amonitas del Campaniano"
+# Mapa de ocurrencias fósiles
+pbdb_map(datos_taxa, main = "Fósiles de Amonitas del Campaniano", 
+         pch = 19, cex = 0.7)
+
+# Mapa del esfuerzo de muestreo
+# pbdb_map_occur(datos_taxa, res = 5)
+
+# Mapa de riqueza de especies
+# pbdb_map_richness(datos_taxa, rank = "species", res = 5)
 
 ```
 
+Las funciones de análisis y exploración del paquete son buenas pero muy limitadas y las gráficas que produce son de baja calidad y muy poco flexibles, por lo mismo la mayor útilidad del paquete reside en importar datos.
+
+::: callout-important
+## Ejercicio
+
+Importa los datos de alguno de los taxones propuestos para el Mioceno (en el caso de Ammonitida seleccionar un piso del Cretácico), usando las funciones de `Tidyverse` organiza rapidamente los datos y crea un diagrama de barras con `ggplot` para los géneros.
+
+-   Usa la función `as_tibble()` para convertir el dataframe generado en un Tibble y operarlo más facilmente.
+
+-   ¿Cuántos géneros o especies hay?
+
+-   Filtra los valores NA para el género y selecciona las 10 más comunes.
+:::
+
 ```{r}
-#| eval: false
-# Mapa de ocurrencias fósiles
-pbdb_map(canidae, main = "Fósiles de Canidae", pch = 19, cex = 0.7)
+#| label: géneros-roedores
+#| fig-cap: "Gráfica de registros de géneros de roedores del Mioceno"
+#| warning: false
+#| code-fold: true
 
-# Mapa del esfuerzo de muestreo
-pbdb_map_occur(canidae, res = 5)
 
-# Mapa de riqueza de especies
-pbdb_map_richness(canidae, rank = "species", res = 5)
+# 1. Descargar datos del grupo elegido (por ejemplo: Rodentia)
+rodentia <- pbdb_occurrences(
+  base_name = "Rodentia",
+  interval = "Miocene",
+  limit = "all",
+  vocab = "pbdb",
+  show = c("coords", "classext", "ident")
+)
+
+# 2. Convertir a tibble y explorar
+rodentia_tbl <- as_tibble(rodentia)
+glimpse(rodentia_tbl)
+
+# print(unique(rodentia_tbl$genus))
+
+# 3. Contar géneros, filtrar los NA, ordenar y seleccionar los 10 más comunes
+top_generos <- rodentia_tbl %>%
+  filter(!is.na(genus)) %>%
+  count(genus, sort = TRUE) %>%
+  slice_max(n, n = 10)
+
+# 4. Crear diagrama de barras con ggplot2
+ggplot(top_generos, aes(x = reorder(genus, n), y = n)) +
+  # Seleccionar diagrama de barras y añadir el conteo
+  geom_col(fill = "aquamarine3",colour = "gray",alpha = 0.8) +
+  geom_text(aes(label = n), hjust = 1.5, colour = "white")+
+  labs(
+    title = "Géneros fósiles más comunes de Rodentia (Mioceno)",
+    x = "Género",
+    y = "Número de registros"
+  ) +
+  coord_flip() +
+  theme_gray()
 
 ```

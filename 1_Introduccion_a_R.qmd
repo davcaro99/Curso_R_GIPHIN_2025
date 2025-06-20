@@ -64,7 +64,7 @@ sin(1)
 ## Operadores lógicos en R
 
 | Operador | Nombre | Descripción | Ejemplo |
-|------------------|------------------|------------------|------------------|
+|----|----|----|----|
 | `<` | Menor que | Compara si un valor es menor | `5 < 10` → `TRUE` |
 | `<=` | Menor o igual |  | `5 <= 5` → `TRUE` |
 | `>` | Mayor que |  | `10 > 3` → `TRUE` |
