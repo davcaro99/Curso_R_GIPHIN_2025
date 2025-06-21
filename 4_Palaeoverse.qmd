@@ -1,0 +1,439 @@
+---
+title: "Módulo 4: Palaeoverse"
+author: "David Caro, GIPHIN"
+date: "06/14/2025"
+format: 
+  pdf:
+    toc: true
+  html:
+    toc: true
+    code-background: true
+editor: visual
+---
+
+# Palaeoverse
+
+![](images/clipboard-2303701370.png)
+
+![](images/clipboard-2658926087.png){width="305"}
+
+`palaeoverse` es un paquete de R que busca **facilitar el análisis de datos paleontológicos**. Proporciona herramientas para:
+
+-   Estandarizar datos fósiles
+
+-   Analizar riqueza taxonómica y patrones de muestreo
+
+-   Realizar simulaciones paleontológicas
+
+-   Visualizar y conectar datos de bases abiertas
+
+El paquete es parte de un ecosistema más amplio que incluye paquetes complementarios como `sepkosky`, `phylopic` y `macrostrat`.
+
+## 🔗 Paquetes relacionados
+
+| Paquete | ¿Qué hace? |
+|------------------------------------|------------------------------------|
+| `palaeoverse` | Funciones para estandarizar, analizar y visualizar datos fósiles |
+| `sepkosky` | Accede a la base de datos de Sepkoski con información de géneros marinos fósiles |
+| `phylopic` | Permite añadir siluetas de organismos fósiles a gráficos de R |
+| `macrostrat` | Conecta con la base de datos Macrostrat (estratigrafía y litología) |
+
+### 💻 Instalación
+
+``` r
+# Instalar desde CRAN o GitHub 
+install.packages("ggspatial")
+install.packages("palaeoverse") 
+install.packages("sepkosky")
+install.packages("rmacrostrat") 
+install.packages("rphylopic") 
+```
+
+En caso de no funcionar con la instalación típica lo hacemos por GitHub:
+
+``` r
+install.packages("devtools")
+devtools::install_github("palaeoverse/palaeoverse")
+devtools::install_github("palaeoverse/rmacrostrat")
+install.packages("remotes")
+remotes::install_github("palaeoverse/rphylopic")
+```
+
+### Cargar paquetes
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: true
+library(palaeoverse) 
+library(rphylopic) 
+library(rmacrostrat) 
+library(tidyverse)
+library(ggplot2)
+library(ggspatial)
+```
+
+# Divesidad de Tetrápodos 
+
+Este ejercicio está inspirado por un ejemplo de [Palaeoverse tetrápodos del Carbonifero y Pérmico](https://palaeoverse.r-universe.dev/articles/palaeoverse/tetrapod-biodiversity.html)
+
+## Importar y revisar los datos
+
+Como siempre lo primero es revisar la estructura de los datos y su organización
+
+```{r}
+# Importamos los datos de Tetrápodos
+data(tetrapods)
+
+str(tetrapods)
+
+unique(tetrapods$class)
+```
+
+::: callout-important
+## Ejercicio
+
+Crea una variable con la edad máxima y otro con la mínima
+:::
+
+```{r}
+#| warning: false
+#| code-fold: true
+
+lim_menor <- min(tetrapods$min_ma)
+lim_mayor <- max(tetrapods$max_ma)
+```
+
+## Explorando las funciones de `palaeoverse`
+
+### Datos temporales
+
+Palaeoverse tiene muchas funciones útiles para trabajar con datos temporales como `time_bins()`
+
+```{r}
+# Creamos el intervalo temporal que deseamos usando time_bins()
+pisos<- time_bins(interval = c("Carboniferous", "Permian"),
+                  # Queremos que la división sea en pisos
+                  rank = "stage",
+                  # Que use los datos de la tabla del 2020
+                  scale = "GTS2020",
+                  # Visualizamos los intervalos creados
+                  plot = TRUE)
+head(pisos)
+```
+
+`palaeoverse` nos permite ajustar las edades númericas según el nombre del periodo
+
+```{r}
+#| warning: false
+
+# Usamos la función look_up que compara los valores y nos regresa dos columnas
+tetrapods <- look_up(tetrapods, int_key = interval_key)
+
+
+# Reemplazamos valores NA con los originales
+# ifelse nos permite hacer la evaluación directamente para todos los elementos
+tetrapods$interval_max_ma <- ifelse(is.na(tetrapods$interval_max_ma),
+                                    tetrapods$max_ma, tetrapods$interval_max_ma)
+
+tetrapods$interval_min_ma <- ifelse(is.na(tetrapods$interval_min_ma),
+                                    tetrapods$min_ma, tetrapods$interval_min_ma)
+
+# Calcular edad media
+tetrapods$interval_mid_ma <- (tetrapods$min_ma + tetrapods$max_ma)/2
+
+# str(tetrapods)
+
+# Removemos los valores que estén por fuera del intervalo deseado
+
+cp_tetrapods <- subset(tetrapods, min_ma > min(pisos$min_ma) & max_ma < 
+                         max(pisos$max_ma))
+
+# Ocurrencias asignadas por los intervalos deseados
+# Este metódo asigna la ocurrencia al intervalo donde está su mayor parte
+maj_tetrapods <- bin_time(occdf = cp_tetrapods,
+                          bins = pisos,
+                          method = 'majority')
+
+colnames(maj_tetrapods)
+```
+
+### Datos espaciales
+
+`palaeoverse` tambien nos permite obtener las paleocoordenadas de los puntos usando la función `palaeorotate()`
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: true
+
+# Obtener las paleocoordenadas de los puntos
+maj_tetrapods <- palaeorotate(occdf = maj_tetrapods, age = "bin_midpoint",
+                              # Usaremos el famoso Paleomap como referencia
+                              method = "point", model = "PALEOMAP")
+```
+
+Si deseamos estudiar la distribución espacial de los datos lo mejor es hacer una grilla para así poder agrupar las ocurrencias y estudiarlas de manera discreta
+
+```{r}
+# Creamos un intervalo espacial que es basicamente una grilla
+
+maj_tetrapods <- bin_space(occdf = maj_tetrapods,
+                           lng = 'p_lng',
+                           lat = 'p_lat',
+                           spacing = 100)
+```
+
+::: callout-important
+## Ejercicio
+
+Qué variables hemos añadido al data frame original y cuál es el significado de cada una de ellas?
+:::
+
+## Diversidad
+
+Vamos a usar algunas funciones para ver la diversidad de tetrápodos
+
+```{r}
+# Esta función filtra todos los valores únicos en cuanto a los taxones
+generos_tetra <- tax_unique(maj_tetrapods,
+                         genus = "genus",
+                         family = "family",
+                         order = "order",
+                         class = "class",
+                         # Queremos que se tenga hasta el nivel de género
+                         resolution = "genus")
+
+str(generos_tetra)
+length(unique(maj_tetrapods$genus))
+```
+
+::: callout-important
+## Ejercicio
+
+¿Por qué el largo de valores únicos de `maj_tetrapods$genus` es 2 filas mayor que el data frame?
+:::
+
+Para calcular la diversidad tendremos en cuenta la cantidad de ocurrencias por colección
+
+```{r}
+# Esta función nos permite extraer la cantidad de géneros por colección
+coll_genera <- group_apply(occdf = maj_tetrapods,
+                           group = c("collection_no"),
+                           fun = tax_unique,
+                           genus = "genus",
+                           family = "family",
+                           order = "order",
+                           class = "class",
+                           resolution = "genus")
+
+
+# Obtenemos los nombres de géneros únicos por colección
+unique_genera <- unique(coll_genera[, c("unique_name", "collection_no")])
+# Calculamos el número de géneros únicos por colección
+coll_taxa <- group_apply(unique_genera, group = "collection_no", fun = nrow)
+# Renombramos las columnas
+colnames(coll_taxa) <- c("n_taxa", "collection_no")
+# Seleccionamos las columnas de edad geológica por colección
+coll_info <- maj_tetrapods[, c("collection_no", "max_ma", "interval_mid_ma", "min_ma")]
+# Eliminamos colecciones duplicadas
+coll_info <- coll_info[!duplicated(coll_info[1]), ]
+# Combinamos la información de edad con la cantidad de géneros
+alpha_data <- merge(coll_info, coll_taxa, by = "collection_no")
+# Revisamos del nuevo dataframe
+str(alpha_data)
+
+```
+
+Ahora vamos a graficar usando las funciones de palaeoverse
+
+```{r}
+
+# Crear el gráfico de diversidad alfa (número de taxones por colección) en el tiempo
+plot(alpha_data$interval_mid_ma,     # Coordenada x: edad media (en Ma) de cada colección
+     alpha_data$n_taxa,              # Coordenada y: número de géneros únicos por colección
+     axes = FALSE,                   # No dibujar los ejes por defecto, los agregaremos manualmente
+     xlim = rev(range(alpha_data$interval_mid_ma, na.rm = TRUE)),  # Invertir el eje x (de pasado a presente)
+     xlab = " ",                     # Etiqueta vacía por ahora, la agregaremos más abajo
+     ylab = "No. taxa",              # Etiqueta del eje y
+     pch = 19,                       # Estilo de punto: sólido
+     col = "#0e826f")                # Color del punto (verde azulado)
+
+# Añadir un marco (box) alrededor del gráfico
+box()
+
+# Añadir el eje vertical (eje Y) en el lado izquierdo
+axis(2)
+
+# Añadir el eje X con nombres geológicos (épocas y periodos)
+# Esta función es del paquete `deeptime` y añade intervalos geológicos automáticamente
+axis_geo(side = 1, intervals = list("epochs", "periods"))
+
+# Agregar la etiqueta del eje X, desplazada hacia abajo
+title(xlab = "Time (Ma)", line = 4)
+
+```
+
+# Macrostrat
+
+Todos los datos usados por Macrostrat se encuentran en su base de datos <https://macrostrat.org/> .
+
+Vamos trabajar con datos geológicos reales utilizando el paquete `rmacrostrat` en R. Nuestro objetivo es encontrar y mapear los afloramientos de la famosa **Formación Hell Creek**, una unidad geológica crucial para entender el límite Cretácico-Paleógeno (K/Pg) en Norteamérica. Este ejercicio está inspirado por un ejemplo de [Palaeoverse](https://palaeoverse.r-universe.dev/articles/rmacrostrat/geologic-map.html)
+
+## Contexto Geológico: La Formación Hell Creek
+
+La **Formación Hell Creek** es una unidad geológica que aflora en Montana, Dakota del Norte y Dakota del Sur (Estados Unidos). Data del Cretácico Superior (Maastrichtiano) al Paleógeno temprano, y es famosa por su excepcional registro fósil, que incluye dinosaurios icónicos como *Edmontosaurus*, *Triceratops* y *Tyrannosaurus rex*, y mamíferos, justo antes de la extinción masiva del K/Pg hace aproximadamente 66 millones de años. Está compuesta por arcillolitas, lutitas y arenitas depositadas por un sistema fluvial en la costa del Mar Interior Occidental.
+
+## Extrayendo los Datos (Fetching)
+
+Lo primero que necesitamos son los identificadores de nombres estratigráficos (`strat_name_ids`) asociados con la Formación Hell Creek. Estos IDs están vinculados a nombres estratigráficos únicos en la base de datos **Macrostrat**. Podemos buscar los IDs relevantes usando las funciones `def_*` que proporcionan información sobre los datos en la base de datos.
+
+```{r}
+# Buscar nombres estratigráficos para "Hell Creek"
+def_strat_names(strat_name = "hell creek")
+```
+
+Hay un total de 3 nombres correspondientes, los tres comparten el mismo `concept_id` (`8598`). Esto indica que estos nombres estratigráficos están unidos bajo una misma entidad geológica. Por lo tanto, podemos usar este `concept_id` para buscar todas las referencias a "Hell Creek":
+
+Ahora, vamos a usar los `strat_name_ids` asociados con el `concept_id` de Hell Creek para obtener los datos espaciales. Para esto, usaremos la función `get_map_outcrop()`, que nos permite obtener polígonos de afloramiento de mapas geológicos. Especificaremos que queremos la salida como un objeto `sf` (simple features). Un objeto `sf` es una colección de "características simples" (representaciones de objetos del mundo real) que incluye atributos y geometrías en un `data.frame`.
+
+```{r}
+# Buscar nombres estratigráficos asociados con el concept_id de Hell Creek
+hc_def <- def_strat_names(concept_id = 8598)
+
+# Obtener información espacial de afloramientos asociada con cada strat_name_id de Hell Creek
+hc <- get_map_outcrop(strat_name_id = hc_def$strat_name_id, sf = TRUE)
+
+head(hc, n =1)
+```
+
+## Visualizar 
+
+Vamos a crear un mapa de forma sencilla
+
+```{r}
+
+# Plot the map
+ggplot() +
+  geom_sf(data = hc, fill = "#C7622B", lwd = 0) +
+  coord_sf(xlim = c(-112, -97), ylim = c(44, 50)) +
+  annotation_north_arrow(location = "br",
+                         pad_y = unit(0.75, "cm"),
+                         height = unit(1, "cm"), width = unit(1, "cm")) +
+  annotation_scale(location = "br", width_hint = 0.3) +
+  theme_bw()
+```
+
+::: callout-important
+## Ejercicio
+
+Busca infromación de la Formación que quieras y crea un mapa con su extensión
+:::
+
+# Phylopic
+
+El paquete **`rphylopic`** en R facilita la búsqueda y visualización de siluetas de organismos de la base de datos **PhyloPic**, permitiéndote incorporarlas fácilmente a tus gráficos. Puedes añadir estas siluetas como capas o puntos de datos tanto en gráficos de R base como en gráficos de `ggplot2`. Además, `rphylopic` ofrece funciones para elegir entre siluetas disponibles, transformarlas (rotar, cambiar color) y guardar las imágenes.
+
+## Funcionamiento
+
+Cada silueta en `phylopic` tiene un **Identificador Único Universal (UUID)**. El primer paso para usar una silueta es obtener su UUID.
+
+La función clave es `get_uuid()`, que permite buscar siluetas en `PhyloPic` usando nombres taxonómicos o filogenéticos (por ejemplo, "Canis lupus" o "pan-Mollusca"). Por defecto, `get_uuid()` devuelve el UUID de la primera coincidencia. Una vez que tienes el UUID, puedes usar `get_phylopic()` para obtener la silueta.
+
+Sin embargo, a menudo existen **múltiples siluetas** para un mismo nombre. Puedes usar el argumento `n` en `get_uuid()` para obtener varios UUIDs coincidentes.
+
+```{r}
+# Obtener un único UUID para una especie (ej. lobo)
+uuid_lobo <- get_uuid(name = "Canis lupus")
+
+# Obtener la imagen para ese UUID
+img_lobo <- get_phylopic(uuid = uuid_lobo)
+
+# Pero si existen múltiples siluetas, podemos obtener varios UUIDs:
+multi_uuids_lobo <- get_uuid(name = "Canis lupus", n = 5)
+print(multi_uuids_lobo) 
+```
+
+## Elegir una imagen
+
+Si hay múltiples siluetas, puede ser difícil elegir la correcta sin verlas. La función`pick_phylopic()` es muy útil porque muestra las siluetas y permite seleccionar la que deseas de forma interactiva.
+
+```{r}
+# Mostrar las primeras 4 siluetas de Canis lupus e interactuar para elegir
+# Una ventana se abrirá para que selecciones la imagen deseada.
+# Por ejemplo, si eliges la opción 1:
+# img_seleccionada <- pick_phylopic(name = "Canis lupus", n = 4, view = 4)
+```
+
+```{r}
+#| message: false
+#| warning: false
+
+# Crear un gráfico ggplot2 base
+p <- ggplot() +
+  coord_cartesian(xlim = c(0.6, 1.4), ylim = c(0.6, 1.4)) +
+  labs(x = "Coordenada X", y = "Coordenada Y", title = "Siluetas en ggplot2")
+
+# Añadir la imagen seleccionada (la que guardamos en img_seleccionada)
+p <- p + add_phylopic(img = img_lobo, x = 1.25, y = 1.25, height = 0.25)
+
+# Añadir otra silueta directamente usando el UUID
+uuid_ggplot <- get_uuid(name = "Canis lupus", n = 1)
+p <- p + add_phylopic(uuid = uuid_ggplot, x = 1, y = 1, height = 0.25)
+
+# Añadir la primera silueta vinculada a un nombre directamente
+p + add_phylopic(name = "Canis lupus", x = 0.75, y = 0.75, height = 0.25)
+```
+
+::: callout-important
+## Ejercicio
+
+Busca y elige siluetas para el taxon que quieras
+:::
+
+::: callout-important
+## Ejercicio
+
+Crea una gráfica de dispersión usando los datos de Palmer Penguins, donde cada puntos sea una silueta de pingüino.
+
+-   Deben usar `geom_phylopic(img = pinguino)`
+:::
+
+```{r}
+#| warning: false
+#| code-fold: true
+
+uuid <- get_uuid(name = "Pygoscelis", n =3)
+# Get the image for that UUID
+pinguino <- get_phylopic(uuid = uuid[3])
+
+```
+
+```{r}
+#| warning: false
+#| code-fold: true
+library(palmerpenguins)
+# Elegimos la silueta que deseamos
+ggplot(penguins) +
+  # Gráfica de dispersión
+  geom_phylopic(img = pinguino,
+             aes(x = bill_depth_mm, y = bill_length_mm, color = species),
+             height = 1.5,show.legend = TRUE, 
+             key_glyph = phylopic_key_glyph(img = pinguino)) +
+  # Seleccionamos la escala de colores para que cuadre
+  scale_colour_manual(values = c("darkorange","purple","cyan4")) +
+  #Le damos un título 
+  ggtitle(substitute(paste("Medidas del pico por especie del género ", italic("Pygoscelis"))))+
+  # Cambiamos los nombres de los ejes
+  xlab("Profundidad del pico (mm)")+
+  ylab("Largo del pico (mm)") +
+  labs("Especies")+
+  # Ajustamos el título y cambiamos la leyenda cursiva
+  theme(plot.title = element_text(vjust = 0, hjust = 0.5),legend.text = element_text(face = "italic"))
+```
+
+```{r}
+citation("palaeoverse")
+citation("rmacrostrat")
+citation("rphylopic")
+```

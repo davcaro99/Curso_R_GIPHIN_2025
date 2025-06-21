@@ -13,6 +13,12 @@ editor: visual
 
 # Columnas estratigráficas con SDAR
 
+#\| message: false
+
+#\| warning: false
+
+#\| echo: true
+
 ```{r}
 #| message: false
 #| warning: false
@@ -295,7 +301,7 @@ print(unique(datos_taxa$family))
 El paquete posee funciones permiten **visualizar y analizar** los datos obtenidos desde la Paleobiology Database, explorando su dimensión **temporal, taxonómica y espacial**. Estas funciones aceptan un objeto `dataframe`, en este caso `datos_taxa`.
 
 | **Función** | **¿Qué hace?** | **Ejemplo** |
-|------------------|----------------------------|---------------------------|
+|------------------|---------------------------|--------------------------|
 | `pbdb_map()` | Muestra un mapa con las ocurrencias fósiles. | `pbdb_map(datos_taxa, main = "Ocurrencias", pch = 19, cex = 0.7)` |
 | `pbdb_map_occur()` | Muestra el esfuerzo de muestreo (número de registros por celda geográfica). | `pbdb_map_occur(datos_taxa, res = 5)` |
 | `pbdb_map_richness()` | Muestra la riqueza (diversidad) de especies/géneros por localidad. | `pbdb_map_richness(datos_taxa, rank = "species")` |
